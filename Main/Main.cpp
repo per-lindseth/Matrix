@@ -10,11 +10,11 @@ using namespace Math;
 template <typename T>
 void PrintMatrix(Matrix2<T> matrix)
 {
-    int nRows = matrix.GetNumRows();
-    int nCols = matrix.GetNumCols();
-    for (int row = 0; row < nRows; ++row)
+    size_t nRows = matrix.GetNumRows();
+    size_t nCols = matrix.GetNumCols();
+    for (size_t row = 0; row < nRows; ++row)
     {
-        for (int col = 0; col < nCols; ++col)
+        for (size_t col = 0; col < nCols; ++col)
         {
             cout << matrix.GetElement(row, col) << " ";
         }
@@ -52,7 +52,15 @@ int main()
     cout << "Element (0, 3) = " << testMatrix.GetElement(0, 3) << endl;
     cout << "Element (1, 3) = " << testMatrix.GetElement(1, 3) << endl;
     cout << "Element (2, 0) = " << testMatrix.GetElement(2, 3) << endl;
-    cout << "Element (5, 5) = " << testMatrix.GetElement(5, 5) << endl;
+    try
+    {
+        testMatrix.GetElement(5, 5);
+        cout << "Element (5, 5) = failed" << endl;
+    }
+    catch (const exception& e)
+    {
+        cout << "Element (5, 5) = exception(" << e.what() << ")" << endl;
+    }
 
     // ************************************************************************
     // Test matrix multiplication.
