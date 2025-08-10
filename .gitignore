@@ -1,0 +1,75 @@
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+## Visual Studio cache og brukerfiler
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.opendb
+ipch/
+
+## Visual Studio profiler & testresultater
+*.psess
+*.vsp
+*.vspx
+*.vsps
+*.vspscc
+TestResult*/
+[Bb]uild[Ll]og.*
+
+## Visual Studio mappen
+.vs/
+
+## CMake mellomfiler
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+*.cmake
+Makefile
+
+## Mellomfiler og binærfiler
+*.obj
+*.o
+*.lo
+*.slo
+*.pdb
+*.idb
+*.ilk
+*.exe
+*.dll
+*.lib
+*.so
+*.dylib
+*.app
+*.iobj
+*.ipdb
+
+## Backup og temp
+*.tmp
+*.bak
+*.log
+*.tlog
+
+## Pakker (NuGet, etc.)
+*.nupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+## Andre vanlige
+*.db
+*.opendb
+*.VC.db
