@@ -79,7 +79,7 @@ int main()
     PrintMatrix(multTest2);
 
     cout << endl << "\n**************************\n";
-    cout << "Test miltiplicaton of column vector by matrix.\n";
+    cout << "Test multiplicaton of column vector by matrix.\n";
     double columnData[3] = { 1.5, 2.5, 3.5 };
     double squareData[9] = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     Matrix2<double> testColumn(3, 1, columnData);
@@ -111,7 +111,7 @@ int main()
 
 
     // ************************************************************************
-    // Test matrix addition ny scalar.
+    // Test matrix addition by scalar.
     cout << endl << "\n**************************\n";
     cout << "Test addition by scalar \n";
     cout << "testMatrix + 2.0 = \n";
@@ -121,7 +121,7 @@ int main()
     PrintMatrix(2.0 + testMatrix);
 
     // ************************************************************************
-    // Test matrix subtraction ny scalar.
+    // Test matrix subtraction by scalar.
     cout << endl << "\n**************************\n";
     cout << "Test subtraction by scalar \n";
     cout << "testMatrix - 2.0 = \n";
@@ -131,7 +131,7 @@ int main()
     PrintMatrix(2.0 - testMatrix);
 
     // ************************************************************************
-    // Test matrix multiplication ny scalar.
+    // Test matrix multiplication by scalar.
     cout << endl << "\n**************************\n";
     cout << "Test multiplication by scalar \n";
     cout << "testMatrix * 2.0 = \n";

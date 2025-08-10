@@ -17,3 +17,8 @@ The problem with this is that the call GetElement(-1, 0) will actually go unnoti
 GetElement(18446744073709551615, 0). However, this is an index that is too large, so it will be 
 taken care of and handled properly.
 
+3. version:
+-----------
+Added test project.
+Avoid manually check all the test print output.
+

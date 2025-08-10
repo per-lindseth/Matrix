@@ -28,6 +28,7 @@ namespace Math
 
         // overload == operator
         bool operator==(const Matrix2<T>& rhs) const;
+        bool operator!=(const Matrix2<T>& rhs) const;
 
         // overload +,-,and * (friends)
         template <class U> friend Matrix2<U> operator+ (const Matrix2<U>& lhs, const Matrix2<U>& rhs);
@@ -175,6 +176,13 @@ namespace Math
             }
         }
         return true;
+    }
+
+    // overload != operator
+    template <typename T>
+    bool Matrix2<T>::operator!=(const Matrix2<T>& rhs)const
+    {
+        return !(*this == rhs);
     }
 
     // overload +,-,and * (friends)
