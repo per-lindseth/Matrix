@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <exception>
 
 namespace Math
@@ -13,18 +14,23 @@ namespace Math
         Matrix2(size_t nRows, size_t nColumns);
         Matrix2(size_t nRows, size_t nColumns, const T* inputData);
         Matrix2(const Matrix2<T>& inputMatrix);
+        Matrix2(Matrix2<T>&& inputMatrix) noexcept;
 
         // And the destructor
         ~Matrix2();
 
         // Configuration methods
-        bool Resize(size_t numRows, size_t numCols);
+        void Resize(size_t numRows, size_t numCols);
 
         // Element access methods
         T GetElement(size_t row, size_t col) const;
         void SetElement(size_t row, size_t col, T element);
         size_t GetNumRows() const;
         size_t GetNumCols() const;
+
+        // overload = operator
+        Matrix2<T>& operator=(const Matrix2<T>& rhs);
+        Matrix2<T>& operator=(Matrix2<T>&& rhs)noexcept;
 
         // overload == operator
         bool operator==(const Matrix2<T>& rhs) const;
@@ -98,6 +104,15 @@ namespace Math
         }
     }
 
+    template <typename T>
+    Matrix2<T>::Matrix2(Matrix2<T>&& inputMatrix) noexcept
+    {
+        std::swap(m_nRows, inputMatrix.m_nRows);
+        std::swap(m_nCols, inputMatrix.m_nCols);
+        std::swap(m_nElements, inputMatrix.m_nElements);
+        std::swap(m_matrixData, inputMatrix.m_matrixData);
+    }
+
     // And the destructor
     template <typename T>
     Matrix2<T>::~Matrix2()
@@ -107,25 +122,9 @@ namespace Math
 
     // Configuration methods
     template <typename T>
-    bool Matrix2<T>::Resize(const size_t numRows, const size_t numCols)
+    void Matrix2<T>::Resize(const size_t numRows, const size_t numCols)
     {
-        m_nRows = numRows;
-        m_nCols = numCols;
-        m_nElements = m_nRows * m_nCols;
-        delete[]m_matrixData;
-        m_matrixData = new T[m_nElements];
-        if (m_matrixData != nullptr)
-        {
-            for (size_t i{ 0 }; i < m_nElements; ++i)
-            {
-                m_matrixData[i] = {};
-            }
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        *this = Matrix2<2>(numRows, numCols);
     }
 
     // Element access methods
@@ -153,6 +152,40 @@ namespace Math
     size_t Matrix2<T>::GetNumCols() const
     {
         return m_nCols;
+    }
+
+    // overload = operator
+    template <typename T>
+    Matrix2<T>& Matrix2<T>::operator=(const Matrix2<T>& rhs)
+    {
+        if (this == &rhs)
+        {
+            return *this;
+        }
+
+        m_nRows = rhs.m_nRows;
+        m_nCols = rhs.m_nCols;
+        m_nElements = rhs.m_nElements;
+        delete[]m_matrixData;
+
+        m_matrixData = new T[m_nElements];
+        for (size_t i{ 0 }; i < m_nElements; ++i)
+        {
+            m_matrixData[i] = rhs.m_matrixData[i];
+        }
+
+        return *this;
+    }
+
+    template <typename T>
+    Matrix2<T>& Matrix2<T>::operator=(Matrix2<T>&& rhs) noexcept
+    {
+        std::swap(m_nRows, rhs.m_nRows);
+        std::swap(m_nCols, rhs.m_nCols);
+        std::swap(m_nElements, rhs.m_nElements);
+        std::swap(m_matrixData, rhs.m_matrixData);
+
+        return *this;
     }
 
     // overload == operator

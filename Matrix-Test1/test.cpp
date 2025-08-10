@@ -3,11 +3,34 @@
 
 using namespace Math;
 
-TEST(MatrixTest, GetElement)
+TEST(MatrixTest, DefaultConstructor)
+{
+    Matrix2<double> m;
+    EXPECT_EQ(m.GetNumRows(), 1);
+    EXPECT_EQ(m.GetNumCols(), 1);
+    EXPECT_EQ(m.GetElement(0, 0), 0.0);
+}
+
+TEST(MatrixTest, ZeroConstructor)
+{
+    Matrix2<double> m(2, 3);
+    EXPECT_EQ(m.GetNumRows(), 2);
+    EXPECT_EQ(m.GetNumCols(), 3);
+    EXPECT_EQ(m.GetElement(0, 0), 0.0);
+    EXPECT_EQ(m.GetElement(1, 0), 0.0);
+    EXPECT_EQ(m.GetElement(0, 1), 0.0);
+    EXPECT_EQ(m.GetElement(1, 1), 0.0);
+    EXPECT_EQ(m.GetElement(0, 2), 0.0);
+    EXPECT_EQ(m.GetElement(1, 2), 0.0);
+}
+
+TEST(MatrixTest, DataConstructor)
 {
     double d[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
     Matrix2<double> m(3, 4, d);
 
+    EXPECT_EQ(m.GetNumRows(), 3);
+    EXPECT_EQ(m.GetNumCols(), 4);
     EXPECT_EQ(m.GetElement(0, 0), 1.0);
     EXPECT_EQ(m.GetElement(1, 0), 5.0);
     EXPECT_EQ(m.GetElement(2, 0), 9.0);
@@ -21,12 +44,118 @@ TEST(MatrixTest, GetElement)
     EXPECT_EQ(m.GetElement(1, 3), 8.0);
     EXPECT_EQ(m.GetElement(2, 3), 12.0);
     EXPECT_THROW(m.GetElement(5, 5), std::exception);
+}
 
-    Matrix2<double> m2(2, 2);
-    EXPECT_EQ(m2.GetElement(0, 0), 0.0);
-    EXPECT_EQ(m2.GetElement(1, 0), 0.0);
-    EXPECT_EQ(m2.GetElement(0, 1), 0.0);
-    EXPECT_EQ(m2.GetElement(1, 1), 0.0);
+TEST(MatrixTest, OutOfBounds)
+{
+    double d[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m(3, 4, d);
+
+    EXPECT_THROW(m.GetElement(5, 0), std::exception);
+    EXPECT_THROW(m.GetElement(0, 5), std::exception);
+    EXPECT_THROW(m.GetElement(5, 5), std::exception);
+}
+
+TEST(MatrixTest, CopyConstructor)
+{
+    double d[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m1(3, 4, d);
+    Matrix2<double> m2(m1);
+
+    EXPECT_EQ(m1.GetNumRows(), 3);
+    EXPECT_EQ(m1.GetNumCols(), 4);
+    EXPECT_EQ(m1.GetElement(0, 0), 1.0);
+    EXPECT_EQ(m1.GetElement(1, 0), 5.0);
+    EXPECT_EQ(m1.GetElement(2, 0), 9.0);
+    EXPECT_EQ(m1.GetElement(0, 1), 2.0);
+    EXPECT_EQ(m1.GetElement(1, 1), 6.0);
+    EXPECT_EQ(m1.GetElement(2, 1), 10.0);
+    EXPECT_EQ(m1.GetElement(0, 2), 3.0);
+    EXPECT_EQ(m1.GetElement(1, 2), 7.0);
+    EXPECT_EQ(m1.GetElement(2, 2), 11.0);
+    EXPECT_EQ(m1.GetElement(0, 3), 4.0);
+    EXPECT_EQ(m1.GetElement(1, 3), 8.0);
+    EXPECT_EQ(m1.GetElement(2, 3), 12.0);
+
+    EXPECT_EQ(m2.GetNumRows(), 3);
+    EXPECT_EQ(m2.GetNumCols(), 4);
+    EXPECT_EQ(m2.GetElement(0, 0), 1.0);
+    EXPECT_EQ(m2.GetElement(1, 0), 5.0);
+    EXPECT_EQ(m2.GetElement(2, 0), 9.0);
+    EXPECT_EQ(m2.GetElement(0, 1), 2.0);
+    EXPECT_EQ(m2.GetElement(1, 1), 6.0);
+    EXPECT_EQ(m2.GetElement(2, 1), 10.0);
+    EXPECT_EQ(m2.GetElement(0, 2), 3.0);
+    EXPECT_EQ(m2.GetElement(1, 2), 7.0);
+    EXPECT_EQ(m2.GetElement(2, 2), 11.0);
+    EXPECT_EQ(m2.GetElement(0, 3), 4.0);
+    EXPECT_EQ(m2.GetElement(1, 3), 8.0);
+    EXPECT_EQ(m2.GetElement(2, 3), 12.0);
+}
+
+
+TEST(MatrixTest, MoveConstructor)
+{
+    double d[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m1(3, 4, d);
+    Matrix2<double> m2(std::move(m1));
+
+    EXPECT_EQ(m1.GetNumRows(), 1);
+    EXPECT_EQ(m1.GetNumCols(), 1);
+
+    EXPECT_EQ(m2.GetNumRows(), 3);
+    EXPECT_EQ(m2.GetNumCols(), 4);
+    EXPECT_EQ(m2.GetElement(0, 0), 1.0);
+    EXPECT_EQ(m2.GetElement(1, 0), 5.0);
+    EXPECT_EQ(m2.GetElement(2, 0), 9.0);
+    EXPECT_EQ(m2.GetElement(0, 1), 2.0);
+    EXPECT_EQ(m2.GetElement(1, 1), 6.0);
+    EXPECT_EQ(m2.GetElement(2, 1), 10.0);
+    EXPECT_EQ(m2.GetElement(0, 2), 3.0);
+    EXPECT_EQ(m2.GetElement(1, 2), 7.0);
+    EXPECT_EQ(m2.GetElement(2, 2), 11.0);
+    EXPECT_EQ(m2.GetElement(0, 3), 4.0);
+    EXPECT_EQ(m2.GetElement(1, 3), 8.0);
+    EXPECT_EQ(m2.GetElement(2, 3), 12.0);
+}
+
+TEST(MatrixTest, CopyAssignment)
+{
+    double d1[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m1(3, 4, d1);
+    double d2[12]{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
+    Matrix2<double> m2(4, 3, d2);
+
+    m1 = m2;
+
+    EXPECT_EQ(m1, m2);
+}
+
+TEST(MatrixTest, MoveAssignment)
+{
+    double d1[12]{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
+    Matrix2<double> m1(4, 3, d1);
+    {
+        double d2[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+        Matrix2<double> m2(3, 4, d2);
+
+        m1 = std::move(m2);
+    }
+
+    EXPECT_EQ(m1.GetNumRows(), 3);
+    EXPECT_EQ(m1.GetNumCols(), 4);
+    EXPECT_EQ(m1.GetElement(0, 0), 1.0);
+    EXPECT_EQ(m1.GetElement(0, 1), 2.0);
+    EXPECT_EQ(m1.GetElement(0, 2), 3.0);
+    EXPECT_EQ(m1.GetElement(0, 3), 4.0);
+    EXPECT_EQ(m1.GetElement(1, 0), 5.0);
+    EXPECT_EQ(m1.GetElement(1, 1), 6.0);
+    EXPECT_EQ(m1.GetElement(1, 2), 7.0);
+    EXPECT_EQ(m1.GetElement(1, 3), 8.0);
+    EXPECT_EQ(m1.GetElement(2, 0), 9.0);
+    EXPECT_EQ(m1.GetElement(2, 1), 10.0);
+    EXPECT_EQ(m1.GetElement(2, 2), 11.0);
+    EXPECT_EQ(m1.GetElement(2, 3), 12.0);
 }
 
 TEST(MatrixTest, Equality)
