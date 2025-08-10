@@ -21,10 +21,10 @@ namespace Math
         bool Resize(size_t numRows, size_t numCols);
 
         // Element access methods
-        T GetElement(size_t row, size_t col);
+        T GetElement(size_t row, size_t col) const;
         void SetElement(size_t row, size_t col, T element);
-        size_t GetNumRows();
-        size_t GetNumCols();
+        size_t GetNumRows() const;
+        size_t GetNumCols() const;
 
         // overload == operator
         bool operator==(const Matrix2<T>& rhs) const;
@@ -44,42 +44,42 @@ namespace Math
         template <class U> friend Matrix2<U> operator* (const Matrix2<U>& lhs, const U& rhs);
 
     private:
-        size_t Sub2Ind(size_t row, size_t col);
-        T* m_matrixData;
-        size_t m_nRows;
-        size_t m_nCols;
-        size_t m_nElements;
+        size_t Sub2Ind(size_t row, size_t col) const;
+        T* m_matrixData{};
+        size_t m_nRows{ 1 };
+        size_t m_nCols{ 1 };
+        size_t m_nElements{ 1 };
     };
 
     // Define the various constructors
     template <typename T>
     Matrix2<T>::Matrix2()
     {
-        m_nRows = 1;
-        m_nCols = 1;
-        m_nElements = 1;
         m_matrixData = new T[m_nElements];
-        m_matrixData[0] = 0.0;
+        m_matrixData[0] = {};
     }
 
     template <typename T>
-    Matrix2<T>::Matrix2(size_t nRows, size_t nColumns)
+    Matrix2<T>::Matrix2(const size_t nRows, const size_t nColumns)
+        : m_nRows(nRows)
+        , m_nCols(nColumns)
+        , m_nElements(nRows* nColumns)
     {
-        m_nRows = nRows;
-        m_nCols = nColumns;
-        m_nElements = 1;
         m_matrixData = new T[m_nElements];
-        m_matrixData[0] = 0.0;
+        for (size_t i{ 0 }; i < m_nElements; ++i)
+        {
+            m_matrixData[i] = {};
+        }
     }
 
     template <typename T>
-    Matrix2<T>::Matrix2(size_t nRows, size_t nColumns, const T* inputData)
+    Matrix2<T>::Matrix2(const size_t nRows, const size_t nColumns, const T* inputData)
+        : m_nRows(nRows)
+        , m_nCols(nColumns)
+        , m_nElements(nRows* nColumns)
     {
-        m_nRows = nRows;
-        m_nCols = nColumns;
-        m_nElements = m_nRows * m_nCols;
         m_matrixData = new T[m_nElements];
-        for (size_t i = 0; i < m_nElements; ++i)
+        for (size_t i{ 0 }; i < m_nElements; ++i)
         {
             m_matrixData[i] = inputData[i];
         }
@@ -87,12 +87,12 @@ namespace Math
 
     template <typename T>
     Matrix2<T>::Matrix2(const Matrix2<T>& inputMatrix)
+        : m_nRows(inputMatrix.m_nRows)
+        , m_nCols(inputMatrix.m_nCols)
+        , m_nElements(inputMatrix.m_nElements)
     {
-        m_nRows = inputMatrix.m_nRows;
-        m_nCols = inputMatrix.m_nCols;
-        m_nElements = m_nRows * m_nCols;
         m_matrixData = new T[m_nElements];
-        for (size_t i = 0; i < m_nElements; ++i)
+        for (size_t i{ 0 }; i < m_nElements; ++i)
         {
             m_matrixData[i] = inputMatrix.m_matrixData[i];
         }
@@ -107,7 +107,7 @@ namespace Math
 
     // Configuration methods
     template <typename T>
-    bool Matrix2<T>::Resize(size_t numRows, size_t numCols)
+    bool Matrix2<T>::Resize(const size_t numRows, const size_t numCols)
     {
         m_nRows = numRows;
         m_nCols = numCols;
@@ -116,9 +116,9 @@ namespace Math
         m_matrixData = new T[m_nElements];
         if (m_matrixData != nullptr)
         {
-            for (size_t i = 0; i < m_nElements; ++i)
+            for (size_t i{ 0 }; i < m_nElements; ++i)
             {
-                m_matrixData[i] = 0.0;
+                m_matrixData[i] = {};
             }
             return true;
         }
@@ -130,29 +130,28 @@ namespace Math
 
     // Element access methods
     template <typename T>
-    T Matrix2<T>::GetElement(size_t row, size_t col)
+    T Matrix2<T>::GetElement(const size_t row, const size_t col) const
     {
-        size_t linearIndex = Sub2Ind(row, col);
+        size_t linearIndex{ Sub2Ind(row, col) };
         return m_matrixData[linearIndex];
     }
 
     template <typename T>
-    void Matrix2<T>::SetElement(size_t row, size_t col, T elementValue)
+    void Matrix2<T>::SetElement(const size_t row, const size_t col, const T elementValue)
     {
-        size_t linearIndex = Sub2Ind(row, col);
+        size_t linearIndex{ Sub2Ind(row, col) };
         m_matrixData[linearIndex] = elementValue;
     }
 
     template <typename T>
-    size_t Matrix2<T>::GetNumRows()
+    size_t Matrix2<T>::GetNumRows() const
     {
         return m_nRows;
     }
 
     template <typename T>
-    size_t Matrix2<T>::GetNumCols()
+    size_t Matrix2<T>::GetNumCols() const
     {
-
         return m_nCols;
     }
 
@@ -168,7 +167,7 @@ namespace Math
         }
 
         // Check if the elements are equal
-        for (size_t i = 0; i < lhs.m_nElements; ++i)
+        for (size_t i{ 0 }; i < lhs.m_nElements; ++i)
         {
             if (lhs.m_matrixData[i] != rhs.m_matrixData[i])
             {
@@ -188,11 +187,11 @@ namespace Math
     // overload +,-,and * (friends)
     template <class U> Matrix2<U> operator+ (const Matrix2<U>& lhs, const Matrix2<U>& rhs)
     {
-        size_t numRows = lhs.m_nRows;
-        size_t numCols = lhs.m_nCols;
-        size_t numElements = numRows * numCols;
-        U* tempResult = new U[numElements];
-        for (size_t i = 0; i < numElements; ++i)
+        size_t numRows{ lhs.m_nRows };
+        size_t numCols{ lhs.m_nCols };
+        size_t numElements{ numRows * numCols };
+        U* tempResult{ new U[numElements] };
+        for (size_t i{ 0 }; i < numElements; ++i)
         {
             tempResult[i] = lhs.m_matrixData[i] + rhs.m_matrixData[i];
         }
@@ -203,11 +202,11 @@ namespace Math
 
     template <class U> Matrix2<U> operator+ (const U& lhs, const Matrix2<U>& rhs)
     {
-        size_t numRows = rhs.m_nRows;
-        size_t numCols = rhs.m_nCols;
-        size_t numElements = numRows * numCols;
-        U* tempResult = new U[numElements];
-        for (size_t i = 0; i < numElements; ++i)
+        size_t numRows{ rhs.m_nRows };
+        size_t numCols{ rhs.m_nCols };
+        size_t numElements{ numRows * numCols };
+        U* tempResult{ new U[numElements] };
+        for (size_t i{ 0 }; i < numElements; ++i)
         {
             tempResult[i] = lhs + rhs.m_matrixData[i];
         }
@@ -218,11 +217,11 @@ namespace Math
 
     template <class U> Matrix2<U> operator+ (const Matrix2<U>& lhs, const U& rhs)
     {
-        size_t numRows = lhs.m_nRows;
-        size_t numCols = lhs.m_nCols;
-        size_t numElements = numRows * numCols;
-        U* tempResult = new U[numElements];
-        for (size_t i = 0; i < numElements; ++i)
+        size_t numRows{ lhs.m_nRows };
+        size_t numCols{ lhs.m_nCols };
+        size_t numElements{ numRows * numCols };
+        U* tempResult{ new U[numElements] };
+        for (size_t i{ 0 }; i < numElements; ++i)
         {
             tempResult[i] = lhs.m_matrixData[i] + rhs;
         }
@@ -233,11 +232,11 @@ namespace Math
 
     template <class U> Matrix2<U> operator- (const Matrix2<U>& lhs, const Matrix2<U>& rhs)
     {
-        size_t numRows = lhs.m_nRows;
-        size_t numCols = lhs.m_nCols;
-        size_t numElements = numRows * numCols;
-        U* tempResult = new U[numElements];
-        for (size_t i = 0; i < numElements; ++i)
+        size_t numRows{ lhs.m_nRows };
+        size_t numCols{ lhs.m_nCols };
+        size_t numElements{ numRows * numCols };
+        U* tempResult{ new U[numElements] };
+        for (size_t i{ 0 }; i < numElements; ++i)
         {
             tempResult[i] = lhs.m_matrixData[i] - rhs.m_matrixData[i];
         }
@@ -248,11 +247,11 @@ namespace Math
 
     template <class U> Matrix2<U> operator- (const U& lhs, const Matrix2<U>& rhs)
     {
-        size_t numRows = rhs.m_nRows;
-        size_t numCols = rhs.m_nCols;
-        size_t numElements = numRows * numCols;
-        U* tempResult = new U[numElements];
-        for (size_t i = 0; i < numElements; ++i)
+        size_t numRows{ rhs.m_nRows };
+        size_t numCols{ rhs.m_nCols };
+        size_t numElements{ numRows * numCols };
+        U* tempResult{ new U[numElements] };
+        for (size_t i{ 0 }; i < numElements; ++i)
         {
             tempResult[i] = lhs - rhs.m_matrixData[i];
         }
@@ -263,11 +262,11 @@ namespace Math
 
     template <class U> Matrix2<U> operator- (const Matrix2<U>& lhs, const U& rhs)
     {
-        size_t numRows = lhs.m_nRows;
-        size_t numCols = lhs.m_nCols;
-        size_t numElements = numRows * numCols;
-        U* tempResult = new U[numElements];
-        for (size_t i = 0; i < numElements; ++i)
+        size_t numRows{ lhs.m_nRows };
+        size_t numCols{ lhs.m_nCols };
+        size_t numElements{ numRows * numCols };
+        U* tempResult{ new U[numElements] };
+        for (size_t i{ 0 }; i < numElements; ++i)
         {
             tempResult[i] = lhs.m_matrixData[i] - rhs;
         }
@@ -278,41 +277,41 @@ namespace Math
 
     template <class U> Matrix2<U> operator* (const Matrix2<U>& lhs, const Matrix2<U>& rhs)
     {
-        size_t r_numRows = rhs.m_nRows;
-        size_t r_numCols = rhs.m_nCols;
-        size_t l_numRows = lhs.m_nRows;
-        size_t l_numCols = lhs.m_nCols;
+        size_t r_numRows{ rhs.m_nRows };
+        size_t r_numCols{ rhs.m_nCols };
+        size_t l_numRows{ lhs.m_nRows };
+        size_t l_numCols{ lhs.m_nCols };
 
         if (l_numCols == r_numRows)
         {
             // This is the standard matrix multiplication condition
             // The output will be the same size as the RHS
-            U* tempResult = new U[l_numRows * r_numCols];
+            U* tempResult{ new U[l_numRows * r_numCols] };
 
             // Loop through each row of the LHS
-            for (size_t lhsRow = 0; lhsRow < l_numRows; ++lhsRow)
+            for (size_t lhsRow{ 0 }; lhsRow < l_numRows; ++lhsRow)
             {
                 // Loop through each column of the RHS
-                for (size_t rhsCol = 0; rhsCol < r_numCols; ++rhsCol)
+                for (size_t rhsCol{ 0 }; rhsCol < r_numCols; ++rhsCol)
                 {
-                    U elementResult = 0.0;
+                    U elementResult{ U{} };
 
                     // Loop through each element of this LHS row
-                    for (size_t lhsCol = 0; lhsCol < l_numCols; ++lhsCol)
+                    for (size_t lhsCol{ 0 }; lhsCol < l_numCols; ++lhsCol)
                     {
                         // Compute the LHS linear index.
-                        size_t lhsLinearIndex = (lhsRow * l_numCols) + lhsCol;
+                        size_t lhsLinearIndex{ (lhsRow * l_numCols) + lhsCol };
 
                         // compute the RHS liear index (based on LHS col)
                         // rhs row number equal to lhs column number.
-                        size_t rhsLinearIndex = (lhsCol * r_numCols) + rhsCol;
+                        size_t rhsLinearIndex{ (lhsCol * r_numCols) + rhsCol };
 
                         // Perform the calculation on these elements.
                         elementResult += lhs.m_matrixData[lhsLinearIndex] * rhs.m_matrixData[rhsLinearIndex];
                     }
 
                     // Store the result.
-                    size_t resultLinearIndex = (lhsRow * r_numCols) + rhsCol;
+                    size_t resultLinearIndex{ (lhsRow * r_numCols) + rhsCol };
                     tempResult[resultLinearIndex] = elementResult;
                 }
             }
@@ -329,11 +328,11 @@ namespace Math
 
     template <class U> Matrix2<U> operator* (const U& lhs, const Matrix2<U>& rhs)
     {
-        size_t numRows = rhs.m_nRows;
-        size_t numCols = rhs.m_nCols;
-        size_t numElements = numRows * numCols;
-        U* tempResult = new U[numElements];
-        for (size_t i = 0; i < numElements; ++i)
+        size_t numRows{ rhs.m_nRows };
+        size_t numCols{ rhs.m_nCols };
+        size_t numElements{ numRows * numCols };
+        U* tempResult{ new U[numElements] };
+        for (size_t i{ 0 }; i < numElements; ++i)
         {
             tempResult[i] = lhs * rhs.m_matrixData[i];
         }
@@ -344,11 +343,11 @@ namespace Math
 
     template <class U> Matrix2<U> operator* (const Matrix2<U>& lhs, const U& rhs)
     {
-        size_t numRows = lhs.m_nRows;
-        size_t numCols = lhs.m_nCols;
-        size_t numElements = numRows * numCols;
-        U* tempResult = new U[numElements];
-        for (size_t i = 0; i < numElements; ++i)
+        size_t numRows{ lhs.m_nRows };
+        size_t numCols{ lhs.m_nCols };
+        size_t numElements{ numRows * numCols };
+        U* tempResult{ new U[numElements] };
+        for (size_t i{ 0 }; i < numElements; ++i)
         {
             tempResult[i] = lhs.m_matrixData[i] * rhs;
         }
@@ -358,7 +357,7 @@ namespace Math
     }
 
     template <typename T>
-    size_t Matrix2<T>::Sub2Ind(size_t row, size_t col)
+    size_t Matrix2<T>::Sub2Ind(const size_t row, const size_t col) const
     {
         if (row < m_nRows && col < m_nCols)
         {

@@ -10,11 +10,11 @@ using namespace Math;
 template <typename T>
 void PrintMatrix(Matrix2<T> matrix)
 {
-    size_t nRows = matrix.GetNumRows();
-    size_t nCols = matrix.GetNumCols();
-    for (size_t row = 0; row < nRows; ++row)
+    size_t nRows{ matrix.GetNumRows() };
+    size_t nCols{ matrix.GetNumCols() };
+    for (size_t row{ 0 }; row < nRows; ++row)
     {
-        for (size_t col = 0; col < nCols; ++col)
+        for (size_t col{ 0 }; col < nCols; ++col)
         {
             cout << matrix.GetElement(row, col) << " ";
         }
@@ -30,7 +30,7 @@ int main()
     // ************************************************************************
     // Create an instance of the Matrix2 class.
     // This will contain a simple 2D 3x3 matrix.
-    double simpleData[12] = { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    double simpleData[12] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
     Matrix2<double> testMatrix(3, 4, simpleData);
 
     // Extract and print the elements of testMatrix
@@ -62,26 +62,30 @@ int main()
         cout << "Element (5, 5) = exception(" << e.what() << ")" << endl;
     }
 
+    cout << "Test m(2,2)\n";
+    Matrix2<double> m(2, 2);
+    PrintMatrix(m);
+
     // ************************************************************************
     // Test matrix multiplication.
     cout << endl << "\n**************************\n";
-    double simpleData2[12] = { 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
+    double simpleData2[12] { 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
     Matrix2<double> testMatrix2(4, 3, simpleData2);
     cout << "4x3 matrix (testMatrix2)\n";
     PrintMatrix(testMatrix2);
     cout << "Multiplication (testMatrix * testMatrix2) result:\n";
-    Matrix2<double> multTest1 = testMatrix * testMatrix2;
+    Matrix2<double> multTest1{ testMatrix * testMatrix2 };
     PrintMatrix(multTest1);
 
     cout << endl << "\n**************************\n";
     cout << "testMatrix2 * testMatrix\n";
-    Matrix2<double> multTest2 = testMatrix2 * testMatrix;
+    Matrix2<double> multTest2{ testMatrix2 * testMatrix };
     PrintMatrix(multTest2);
 
     cout << endl << "\n**************************\n";
     cout << "Test multiplicaton of column vector by matrix.\n";
-    double columnData[3] = { 1.5, 2.5, 3.5 };
-    double squareData[9] = { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
+    double columnData[3]  { 1.5, 2.5, 3.5 };
+    double squareData[9]  { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     Matrix2<double> testColumn(3, 1, columnData);
     Matrix2<double> squareMatrix(3, 3, squareData);
     cout << "Column vector = " << endl;
@@ -105,7 +109,7 @@ int main()
     cout << "testMatrix == testMatrix2: " << (testMatrix == testMatrix2) << endl;
     cout << "testMatrix2 == testMatrix: " << (testMatrix2 == testMatrix) << endl;
     cout << "(Let testMatrix3 = testMatrix)\n";
-    Matrix2<double> testMatrix3 = testMatrix;
+    Matrix2<double> testMatrix3{ testMatrix };
     cout << "tetstMatrix == testMatrix3: " << (testMatrix == testMatrix3) << endl;
     cout << "tetstMatrix3 == testMatrix: " << (testMatrix3 == testMatrix) << endl;
 
