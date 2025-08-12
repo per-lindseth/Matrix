@@ -23,14 +23,14 @@ void PrintMatrix(Matrix2<T> matrix)
 }
 
 
-int main()
+void test()
 {
     cout << "Code to test Matrix2\n";
 
     // ************************************************************************
     // Create an instance of the Matrix2 class.
     // This will contain a simple 2D 3x3 matrix.
-    double simpleData[12] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    std::vector<double> simpleData { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
     Matrix2<double> testMatrix(3, 4, simpleData);
 
     // Extract and print the elements of testMatrix
@@ -69,7 +69,7 @@ int main()
     // ************************************************************************
     // Test matrix multiplication.
     cout << endl << "\n**************************\n";
-    double simpleData2[12] { 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
+    std::vector<double> simpleData2{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
     Matrix2<double> testMatrix2(4, 3, simpleData2);
     cout << "4x3 matrix (testMatrix2)\n";
     PrintMatrix(testMatrix2);
@@ -84,8 +84,8 @@ int main()
 
     cout << endl << "\n**************************\n";
     cout << "Test multiplicaton of column vector by matrix.\n";
-    double columnData[3]  { 1.5, 2.5, 3.5 };
-    double squareData[9]  { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
+    std::vector<double> columnData{ 1.5, 2.5, 3.5 };
+    std::vector<double> squareData{ 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
     Matrix2<double> testColumn(3, 1, columnData);
     Matrix2<double> squareMatrix(3, 3, squareData);
     cout << "Column vector = " << endl;
@@ -143,4 +143,23 @@ int main()
     cout << endl;
     cout << "2.0 * testMatrix = \n";
     PrintMatrix(2.0 * testMatrix);
+}
+
+template <typename T>
+void PrintVector(std::vector<T> v)
+{
+    auto s{ v.size() };
+    for (size_t i{ 0 }; i < s; ++i)
+    {
+        cout << v[i] << " ";
+        if ((i+1) % 10 == 0)
+            cout << endl;
+    }
+    cout << endl;
+}
+
+int main()
+{
+    test();
+    return 0;
 }

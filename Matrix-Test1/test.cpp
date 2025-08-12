@@ -26,8 +26,8 @@ TEST(MatrixTest, ZeroConstructor)
 
 TEST(MatrixTest, DataConstructor)
 {
-    double d[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-    Matrix2<double> m(3, 4, d);
+    std::vector<double> d{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m(3, 4, move(d));
 
     EXPECT_EQ(m.GetNumRows(), 3);
     EXPECT_EQ(m.GetNumCols(), 4);
@@ -48,8 +48,8 @@ TEST(MatrixTest, DataConstructor)
 
 TEST(MatrixTest, OutOfBounds)
 {
-    double d[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-    Matrix2<double> m(3, 4, d);
+    std::vector<double> d{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m(3, 4, move(d));
 
     EXPECT_THROW(m.GetElement(5, 0), std::exception);
     EXPECT_THROW(m.GetElement(0, 5), std::exception);
@@ -58,8 +58,8 @@ TEST(MatrixTest, OutOfBounds)
 
 TEST(MatrixTest, CopyConstructor)
 {
-    double d[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-    Matrix2<double> m1(3, 4, d);
+    std::vector<double> d{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m1(3, 4, move(d));
     Matrix2<double> m2(m1);
 
     EXPECT_EQ(m1.GetNumRows(), 3);
@@ -96,12 +96,12 @@ TEST(MatrixTest, CopyConstructor)
 
 TEST(MatrixTest, MoveConstructor)
 {
-    double d[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    std::vector<double> d{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
     Matrix2<double> m1(3, 4, d);
     Matrix2<double> m2(std::move(m1));
 
-    EXPECT_EQ(m1.GetNumRows(), 1);
-    EXPECT_EQ(m1.GetNumCols(), 1);
+    EXPECT_EQ(m1.GetNumRows(), 3);
+    EXPECT_EQ(m1.GetNumCols(), 4);
 
     EXPECT_EQ(m2.GetNumRows(), 3);
     EXPECT_EQ(m2.GetNumCols(), 4);
@@ -121,10 +121,10 @@ TEST(MatrixTest, MoveConstructor)
 
 TEST(MatrixTest, CopyAssignment)
 {
-    double d1[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-    Matrix2<double> m1(3, 4, d1);
-    double d2[12]{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
-    Matrix2<double> m2(4, 3, d2);
+    std::vector<double> d1{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m1(3, 4, move(d1));
+    std::vector<double> d2{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
+    Matrix2<double> m2(4, 3, move(d2));
 
     m1 = m2;
 
@@ -133,11 +133,11 @@ TEST(MatrixTest, CopyAssignment)
 
 TEST(MatrixTest, MoveAssignment)
 {
-    double d1[12]{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
-    Matrix2<double> m1(4, 3, d1);
+    std::vector<double> d1{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
+    Matrix2<double> m1(4, 3, move(d1));
     {
-        double d2[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-        Matrix2<double> m2(3, 4, d2);
+        std::vector<double> d2{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+        Matrix2<double> m2(3, 4, move(d2));
 
         m1 = std::move(m2);
     }
@@ -160,10 +160,10 @@ TEST(MatrixTest, MoveAssignment)
 
 TEST(MatrixTest, Equality)
 {
-    double d1[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-    Matrix2<double> m1(3, 4, d1);
-    double d2[12]{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
-    Matrix2<double> m2(4, 3, d2);
+    std::vector<double> d1{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m1(3, 4, move(d1));
+    std::vector<double> d2{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
+    Matrix2<double> m2(4, 3, move(d2));
     Matrix2<double> m3(m1);
 
     EXPECT_NE(m1, m2);
@@ -174,65 +174,65 @@ TEST(MatrixTest, Equality)
 
 TEST(MatrixTest, Multiplication)
 {
-    double d1[12]{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-    Matrix2<double> m1(3, 4, d1);
-    double d2[12]{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
-    Matrix2<double> m2(4, 3, d2);
-    double d3[9]{ 10.0,  20.0,  30.0, 26.0, 52.0, 78.0, 42.0, 84.0, 126.0 };
-    Matrix2<double> m3(3, 3, d3);
-    double d4[16]{ 38.0,  44.0,  50.0, 56.0, 38.0,  44.0,  50.0, 56.0, 38.0, 44.0,  50.0, 56.0, 38.0,  44.0,  50.0, 56.0, };
-    Matrix2<double> m4(4, 4, d4);
+    std::vector<double> d1{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m1(3, 4, move(d1));
+    std::vector<double> d2{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
+    Matrix2<double> m2(4, 3, move(d2));
+    std::vector<double> d3{ 10.0,  20.0,  30.0, 26.0, 52.0, 78.0, 42.0, 84.0, 126.0 };
+    Matrix2<double> m3(3, 3, move(d3));
+    std::vector<double> d4{ 38.0,  44.0,  50.0, 56.0, 38.0,  44.0,  50.0, 56.0, 38.0, 44.0,  50.0, 56.0, 38.0,  44.0,  50.0, 56.0, };
+    Matrix2<double> m4(4, 4, move(d4));
 
     EXPECT_EQ(m3, m1 * m2);
     EXPECT_EQ(m4, m2 * m1);
 
-    double columnData[3] { 1.5, 2.5, 3.5 };
-    double squareData[9] { 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
-    Matrix2<double> testColumn(3, 1, columnData);
-    Matrix2<double> squareMatrix(3, 3, squareData);
+    std::vector<double> columnData{ 1.5, 2.5, 3.5 };
+    std::vector<double> squareData{ 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
+    Matrix2<double> testColumn(3, 1, move(columnData));
+    Matrix2<double> squareMatrix(3, 3, move(squareData));
 
-    double d5[3] { 0.0 };
-    Matrix2<double> m5(1, 1, d5);
+    std::vector<double> d5{ 0.0 };
+    Matrix2<double> m5(1, 1, move(d5));
     EXPECT_EQ(m5, testColumn * squareMatrix);
     EXPECT_EQ(testColumn, squareMatrix * testColumn);
 
-    double d6[9]  { 2.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 2.0 };
-    Matrix2<double> m6(3, 3, d6);
+    std::vector<double> d6{ 2.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 2.0 };
+    Matrix2<double> m6(3, 3, move(d6));
     EXPECT_EQ(m6, squareMatrix + 1.0);
 
-    double d7[3]  { 9.0, 10.0, 11.0 };
-    Matrix2<double> m7(3, 1, d7);
+    std::vector<double> d7{ 9.0, 10.0, 11.0 };
+    Matrix2<double> m7(3, 1, move(d7));
     EXPECT_EQ(m7, m6 * testColumn);
 }
 
 TEST(MatrixTest, AdditionByScalar)
 {
-    double d1[12]  { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-    Matrix2<double> m1(3, 4, d1);
-    double d2[12]  { 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0 };
-    Matrix2<double> m2(3, 4, d2);
+    std::vector<double> d1{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m1(3, 4, move(d1));
+    std::vector<double> d2{ 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0 };
+    Matrix2<double> m2(3, 4, move(d2));
     EXPECT_EQ(m2, m1 + 2.0);
     EXPECT_EQ(m2, 2.0 + m1);
 }
 
 TEST(MatrixTest, SubtractionByScalar)
 {
-    double d1[12]  { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-    Matrix2<double> m1(3, 4, d1);
-    double d2[12]  { -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 };
-    Matrix2<double> m2(3, 4, d2);
-    double d3[12]  { 1.0, 0.0, -1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0, -8.0, -9.0, -10.0 };
-    Matrix2<double> m3(3, 4, d3);
+    std::vector<double> d1{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m1(3, 4, move(d1));
+    std::vector<double> d2{ -1.0, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0 };
+    Matrix2<double> m2(3, 4, move(d2));
+    std::vector<double> d3{ 1.0, 0.0, -1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0, -8.0, -9.0, -10.0 };
+    Matrix2<double> m3(3, 4, move(d3));
     EXPECT_EQ(m2, m1 - 2.0);
     EXPECT_EQ(m3, 2.0 - m1);
 }
 
 TEST(MatrixTest, MultiplicationByScalar)
 {
-    double d1[12]  { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
-    Matrix2<double> m1(3, 4, d1);
-    double d2[12]  { 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0 };
-    Matrix2<double> m2(3, 4, d2);
+    std::vector<double> d1{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    Matrix2<double> m1(3, 4, move(d1));
+    std::vector<double> d2{ 2.0, 4.0, 6.0, 8.0, 10.0, 12.0, 14.0, 16.0, 18.0, 20.0, 22.0, 24.0 };
+    Matrix2<double> m2(3, 4, move(d2));
     EXPECT_EQ(m2, m1 * 2.0);
     EXPECT_EQ(m2, 2.0 * m1);
 }
