@@ -47,3 +47,19 @@ implements two variants, one for c++20 and one for c++23 (just for fun).
 
 The MyVec and MyVecConst classes enables the code to use to dimensional indices like m(row, column)
 which greatly improves readability. In c++23 the () can be replaced with [].
+
+6.version: Inverse matrix
+-------------------------
+Replaces MyVec and MyVecConst with the members operator() and at(). 
+MyVec and MyVecConst was a misstake.
+
+Implemented Invers and some helper rutine used in Inverse.
+
+The ForEach rutines traverse the matrix or matrices in different ways, all taking a boolean function
+as argument. It call this function with one element at the time until the function returns true
+or all elements are traversed. The one taking two matrices traverse the same row,colum element in both
+and for each calles the given function with both. The prurpose with these is to avoid the loops
+and hopefully makes the code more readable.
+
+
+

@@ -7,22 +7,6 @@
 using namespace std;
 using namespace Math;
 
-template <typename T>
-void PrintMatrix(Matrix2<T> matrix)
-{
-    size_t nRows{ matrix.GetNumRows() };
-    size_t nCols{ matrix.GetNumCols() };
-    for (size_t row{ 0 }; row < nRows; ++row)
-    {
-        for (size_t col{ 0 }; col < nCols; ++col)
-        {
-            cout << matrix.GetElement(row, col) << " ";
-        }
-        cout << endl;
-    }
-}
-
-
 void test()
 {
     cout << "Code to test Matrix2\n";
@@ -35,26 +19,26 @@ void test()
 
     // Extract and print the elements of testMatrix
     cout << endl << "**************************\n";
-    PrintMatrix(testMatrix);
+    testMatrix.PrintMatrix();
 
     // ************************************************************************
     cout << endl << "**************************\n";
     cout << "Test element retrieval.\n";
-    cout << "Element (0, 0) = " << testMatrix.GetElement(0, 0) << endl;
-    cout << "Element (1, 0) = " << testMatrix.GetElement(1, 0) << endl;
-    cout << "Element (2, 0) = " << testMatrix.GetElement(2, 0) << endl;
-    cout << "Element (0, 1) = " << testMatrix.GetElement(0, 1) << endl;
-    cout << "Element (1, 1) = " << testMatrix.GetElement(1, 1) << endl;
-    cout << "Element (2, 1) = " << testMatrix.GetElement(2, 1) << endl;
-    cout << "Element (0, 2) = " << testMatrix.GetElement(0, 2) << endl;
-    cout << "Element (1, 2) = " << testMatrix.GetElement(1, 2) << endl;
-    cout << "Element (2, 2) = " << testMatrix.GetElement(2, 2) << endl;
-    cout << "Element (0, 3) = " << testMatrix.GetElement(0, 3) << endl;
-    cout << "Element (1, 3) = " << testMatrix.GetElement(1, 3) << endl;
-    cout << "Element (2, 0) = " << testMatrix.GetElement(2, 3) << endl;
+    cout << "Element (0, 0) = " << testMatrix.At(0, 0) << endl;
+    cout << "Element (1, 0) = " << testMatrix.At(1, 0) << endl;
+    cout << "Element (2, 0) = " << testMatrix.At(2, 0) << endl;
+    cout << "Element (0, 1) = " << testMatrix.At(0, 1) << endl;
+    cout << "Element (1, 1) = " << testMatrix.At(1, 1) << endl;
+    cout << "Element (2, 1) = " << testMatrix.At(2, 1) << endl;
+    cout << "Element (0, 2) = " << testMatrix.At(0, 2) << endl;
+    cout << "Element (1, 2) = " << testMatrix.At(1, 2) << endl;
+    cout << "Element (2, 2) = " << testMatrix.At(2, 2) << endl;
+    cout << "Element (0, 3) = " << testMatrix.At(0, 3) << endl;
+    cout << "Element (1, 3) = " << testMatrix.At(1, 3) << endl;
+    cout << "Element (2, 0) = " << testMatrix.At(2, 3) << endl;
     try
     {
-        testMatrix.GetElement(5, 5);
+        testMatrix.At(5, 5);
         cout << "Element (5, 5) = failed" << endl;
     }
     catch (const exception& e)
@@ -64,7 +48,7 @@ void test()
 
     cout << "Test m(2,2)\n";
     Matrix2<double> m(2, 2);
-    PrintMatrix(m);
+    m.PrintMatrix();
 
     // ************************************************************************
     // Test matrix multiplication.
@@ -72,15 +56,15 @@ void test()
     std::vector<double> simpleData2{ 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0, 1.0, 2.0, 3.0 };
     Matrix2<double> testMatrix2(4, 3, simpleData2);
     cout << "4x3 matrix (testMatrix2)\n";
-    PrintMatrix(testMatrix2);
+    testMatrix2.PrintMatrix();
     cout << "Multiplication (testMatrix * testMatrix2) result:\n";
     Matrix2<double> multTest1{ testMatrix * testMatrix2 };
-    PrintMatrix(multTest1);
+    multTest1.PrintMatrix();
 
     cout << endl << "\n**************************\n";
     cout << "testMatrix2 * testMatrix\n";
     Matrix2<double> multTest2{ testMatrix2 * testMatrix };
-    PrintMatrix(multTest2);
+    multTest2.PrintMatrix();
 
     cout << endl << "\n**************************\n";
     cout << "Test multiplicaton of column vector by matrix.\n";
@@ -89,18 +73,18 @@ void test()
     Matrix2<double> testColumn(3, 1, columnData);
     Matrix2<double> squareMatrix(3, 3, squareData);
     cout << "Column vector = " << endl;
-    PrintMatrix(testColumn);
+    testColumn.PrintMatrix();
     cout << "Square matrix = " << endl;
-    PrintMatrix(squareMatrix);
+    squareMatrix.PrintMatrix();
     cout << "Column vector * SquareMatrix = " << endl;
-    PrintMatrix(testColumn * squareMatrix);
+    (testColumn * squareMatrix).PrintMatrix();
     cout << "SquareMatrix * Column vector =" << endl;
-    PrintMatrix(squareMatrix * testColumn);
+    (squareMatrix * testColumn).PrintMatrix();
     cout << "Square matrix + 1.0 = " << endl;
     Matrix2 squareMatrix2 = squareMatrix + 1.0;
-    PrintMatrix(squareMatrix2);
+    squareMatrix2.PrintMatrix();
     cout << "(Square matrix + 1.0) * Column vector = " << endl;
-    PrintMatrix(squareMatrix2 * testColumn);
+    (squareMatrix2 * testColumn).PrintMatrix();
 
     // ************************************************************************
     // Test equality operator.
@@ -119,30 +103,30 @@ void test()
     cout << endl << "\n**************************\n";
     cout << "Test addition by scalar \n";
     cout << "testMatrix + 2.0 = \n";
-    PrintMatrix(testMatrix + 2.0);
+    (testMatrix + 2.0).PrintMatrix();
     cout << endl;
     cout << "2.0 + testMatrix = \n";
-    PrintMatrix(2.0 + testMatrix);
+    (2.0 + testMatrix).PrintMatrix();
 
     // ************************************************************************
     // Test matrix subtraction by scalar.
     cout << endl << "\n**************************\n";
     cout << "Test subtraction by scalar \n";
     cout << "testMatrix - 2.0 = \n";
-    PrintMatrix(testMatrix - 2.0);
+    (testMatrix - 2.0).PrintMatrix();
     cout << endl;
     cout << "2.0 - testMatrix = \n";
-    PrintMatrix(2.0 - testMatrix);
+    (2.0 - testMatrix).PrintMatrix();
 
     // ************************************************************************
     // Test matrix multiplication by scalar.
     cout << endl << "\n**************************\n";
     cout << "Test multiplication by scalar \n";
     cout << "testMatrix * 2.0 = \n";
-    PrintMatrix(testMatrix * 2.0);
+    (testMatrix * 2.0).PrintMatrix();
     cout << endl;
     cout << "2.0 * testMatrix = \n";
-    PrintMatrix(2.0 * testMatrix);
+    (2.0 * testMatrix).PrintMatrix();
 }
 
 template <typename T>
@@ -160,6 +144,28 @@ void PrintVector(std::vector<T> v)
 
 int main()
 {
-    test();
+    std::vector<double> d1{ 1.0, 2.0, 3.0,
+                            4.0, 5.0, 6.0,
+                            7.0, 15.0, 9.0 };
+    Matrix2<double> m1(3, 3, move(d1));
+    Matrix2<double> m2(m1);
+    m1.PrintMatrix();
+    if (m1.Inverse())
+    {
+        cout << "Matrix inversed!\n";
+    }
+    else
+    {
+        cout << "Matrix faled to inversed!\n";
+    }
+    m1.PrintMatrix();
+
+    auto m{ m1 * m2 };
+
+    cout << endl;
+
+    m.PrintMatrix();
+        
+    //test();
     return 0;
 }

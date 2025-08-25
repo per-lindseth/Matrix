@@ -8,7 +8,7 @@ TEST(MatrixTest, DefaultConstructor)
     Matrix2<double> m;
     EXPECT_EQ(m.GetNumRows(), 1);
     EXPECT_EQ(m.GetNumCols(), 1);
-    EXPECT_EQ(m.GetElement(0, 0), 0.0);
+    EXPECT_EQ(m.At(0, 0), 0.0);
 }
 
 TEST(MatrixTest, ZeroConstructor)
@@ -16,12 +16,12 @@ TEST(MatrixTest, ZeroConstructor)
     Matrix2<double> m(2, 3);
     EXPECT_EQ(m.GetNumRows(), 2);
     EXPECT_EQ(m.GetNumCols(), 3);
-    EXPECT_EQ(m.GetElement(0, 0), 0.0);
-    EXPECT_EQ(m.GetElement(1, 0), 0.0);
-    EXPECT_EQ(m.GetElement(0, 1), 0.0);
-    EXPECT_EQ(m.GetElement(1, 1), 0.0);
-    EXPECT_EQ(m.GetElement(0, 2), 0.0);
-    EXPECT_EQ(m.GetElement(1, 2), 0.0);
+    EXPECT_EQ(m.At(0, 0), 0.0);
+    EXPECT_EQ(m.At(1, 0), 0.0);
+    EXPECT_EQ(m.At(0, 1), 0.0);
+    EXPECT_EQ(m.At(1, 1), 0.0);
+    EXPECT_EQ(m.At(0, 2), 0.0);
+    EXPECT_EQ(m.At(1, 2), 0.0);
 }
 
 TEST(MatrixTest, DataConstructor)
@@ -31,19 +31,19 @@ TEST(MatrixTest, DataConstructor)
 
     EXPECT_EQ(m.GetNumRows(), 3);
     EXPECT_EQ(m.GetNumCols(), 4);
-    EXPECT_EQ(m.GetElement(0, 0), 1.0);
-    EXPECT_EQ(m.GetElement(1, 0), 5.0);
-    EXPECT_EQ(m.GetElement(2, 0), 9.0);
-    EXPECT_EQ(m.GetElement(0, 1), 2.0);
-    EXPECT_EQ(m.GetElement(1, 1), 6.0);
-    EXPECT_EQ(m.GetElement(2, 1), 10.0);
-    EXPECT_EQ(m.GetElement(0, 2), 3.0);
-    EXPECT_EQ(m.GetElement(1, 2), 7.0);
-    EXPECT_EQ(m.GetElement(2, 2), 11.0);
-    EXPECT_EQ(m.GetElement(0, 3), 4.0);
-    EXPECT_EQ(m.GetElement(1, 3), 8.0);
-    EXPECT_EQ(m.GetElement(2, 3), 12.0);
-    EXPECT_THROW(m.GetElement(5, 5), std::exception);
+    EXPECT_EQ(m.At(0, 0), 1.0);
+    EXPECT_EQ(m.At(1, 0), 5.0);
+    EXPECT_EQ(m.At(2, 0), 9.0);
+    EXPECT_EQ(m.At(0, 1), 2.0);
+    EXPECT_EQ(m.At(1, 1), 6.0);
+    EXPECT_EQ(m.At(2, 1), 10.0);
+    EXPECT_EQ(m.At(0, 2), 3.0);
+    EXPECT_EQ(m.At(1, 2), 7.0);
+    EXPECT_EQ(m.At(2, 2), 11.0);
+    EXPECT_EQ(m.At(0, 3), 4.0);
+    EXPECT_EQ(m.At(1, 3), 8.0);
+    EXPECT_EQ(m.At(2, 3), 12.0);
+    EXPECT_THROW(m.At(5, 5), std::exception);
 }
 
 TEST(MatrixTest, OutOfBounds)
@@ -51,9 +51,9 @@ TEST(MatrixTest, OutOfBounds)
     std::vector<double> d{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
     Matrix2<double> m(3, 4, move(d));
 
-    EXPECT_THROW(m.GetElement(5, 0), std::exception);
-    EXPECT_THROW(m.GetElement(0, 5), std::exception);
-    EXPECT_THROW(m.GetElement(5, 5), std::exception);
+    EXPECT_THROW(m.At(5, 0), std::exception);
+    EXPECT_THROW(m.At(0, 5), std::exception);
+    EXPECT_THROW(m.At(5, 5), std::exception);
 }
 
 TEST(MatrixTest, CopyConstructor)
@@ -64,33 +64,33 @@ TEST(MatrixTest, CopyConstructor)
 
     EXPECT_EQ(m1.GetNumRows(), 3);
     EXPECT_EQ(m1.GetNumCols(), 4);
-    EXPECT_EQ(m1.GetElement(0, 0), 1.0);
-    EXPECT_EQ(m1.GetElement(1, 0), 5.0);
-    EXPECT_EQ(m1.GetElement(2, 0), 9.0);
-    EXPECT_EQ(m1.GetElement(0, 1), 2.0);
-    EXPECT_EQ(m1.GetElement(1, 1), 6.0);
-    EXPECT_EQ(m1.GetElement(2, 1), 10.0);
-    EXPECT_EQ(m1.GetElement(0, 2), 3.0);
-    EXPECT_EQ(m1.GetElement(1, 2), 7.0);
-    EXPECT_EQ(m1.GetElement(2, 2), 11.0);
-    EXPECT_EQ(m1.GetElement(0, 3), 4.0);
-    EXPECT_EQ(m1.GetElement(1, 3), 8.0);
-    EXPECT_EQ(m1.GetElement(2, 3), 12.0);
+    EXPECT_EQ(m1.At(0, 0), 1.0);
+    EXPECT_EQ(m1.At(1, 0), 5.0);
+    EXPECT_EQ(m1.At(2, 0), 9.0);
+    EXPECT_EQ(m1.At(0, 1), 2.0);
+    EXPECT_EQ(m1.At(1, 1), 6.0);
+    EXPECT_EQ(m1.At(2, 1), 10.0);
+    EXPECT_EQ(m1.At(0, 2), 3.0);
+    EXPECT_EQ(m1.At(1, 2), 7.0);
+    EXPECT_EQ(m1.At(2, 2), 11.0);
+    EXPECT_EQ(m1.At(0, 3), 4.0);
+    EXPECT_EQ(m1.At(1, 3), 8.0);
+    EXPECT_EQ(m1.At(2, 3), 12.0);
 
     EXPECT_EQ(m2.GetNumRows(), 3);
     EXPECT_EQ(m2.GetNumCols(), 4);
-    EXPECT_EQ(m2.GetElement(0, 0), 1.0);
-    EXPECT_EQ(m2.GetElement(1, 0), 5.0);
-    EXPECT_EQ(m2.GetElement(2, 0), 9.0);
-    EXPECT_EQ(m2.GetElement(0, 1), 2.0);
-    EXPECT_EQ(m2.GetElement(1, 1), 6.0);
-    EXPECT_EQ(m2.GetElement(2, 1), 10.0);
-    EXPECT_EQ(m2.GetElement(0, 2), 3.0);
-    EXPECT_EQ(m2.GetElement(1, 2), 7.0);
-    EXPECT_EQ(m2.GetElement(2, 2), 11.0);
-    EXPECT_EQ(m2.GetElement(0, 3), 4.0);
-    EXPECT_EQ(m2.GetElement(1, 3), 8.0);
-    EXPECT_EQ(m2.GetElement(2, 3), 12.0);
+    EXPECT_EQ(m2.At(0, 0), 1.0);
+    EXPECT_EQ(m2.At(1, 0), 5.0);
+    EXPECT_EQ(m2.At(2, 0), 9.0);
+    EXPECT_EQ(m2.At(0, 1), 2.0);
+    EXPECT_EQ(m2.At(1, 1), 6.0);
+    EXPECT_EQ(m2.At(2, 1), 10.0);
+    EXPECT_EQ(m2.At(0, 2), 3.0);
+    EXPECT_EQ(m2.At(1, 2), 7.0);
+    EXPECT_EQ(m2.At(2, 2), 11.0);
+    EXPECT_EQ(m2.At(0, 3), 4.0);
+    EXPECT_EQ(m2.At(1, 3), 8.0);
+    EXPECT_EQ(m2.At(2, 3), 12.0);
 }
 
 
@@ -105,18 +105,18 @@ TEST(MatrixTest, MoveConstructor)
 
     EXPECT_EQ(m2.GetNumRows(), 3);
     EXPECT_EQ(m2.GetNumCols(), 4);
-    EXPECT_EQ(m2.GetElement(0, 0), 1.0);
-    EXPECT_EQ(m2.GetElement(1, 0), 5.0);
-    EXPECT_EQ(m2.GetElement(2, 0), 9.0);
-    EXPECT_EQ(m2.GetElement(0, 1), 2.0);
-    EXPECT_EQ(m2.GetElement(1, 1), 6.0);
-    EXPECT_EQ(m2.GetElement(2, 1), 10.0);
-    EXPECT_EQ(m2.GetElement(0, 2), 3.0);
-    EXPECT_EQ(m2.GetElement(1, 2), 7.0);
-    EXPECT_EQ(m2.GetElement(2, 2), 11.0);
-    EXPECT_EQ(m2.GetElement(0, 3), 4.0);
-    EXPECT_EQ(m2.GetElement(1, 3), 8.0);
-    EXPECT_EQ(m2.GetElement(2, 3), 12.0);
+    EXPECT_EQ(m2.At(0, 0), 1.0);
+    EXPECT_EQ(m2.At(1, 0), 5.0);
+    EXPECT_EQ(m2.At(2, 0), 9.0);
+    EXPECT_EQ(m2.At(0, 1), 2.0);
+    EXPECT_EQ(m2.At(1, 1), 6.0);
+    EXPECT_EQ(m2.At(2, 1), 10.0);
+    EXPECT_EQ(m2.At(0, 2), 3.0);
+    EXPECT_EQ(m2.At(1, 2), 7.0);
+    EXPECT_EQ(m2.At(2, 2), 11.0);
+    EXPECT_EQ(m2.At(0, 3), 4.0);
+    EXPECT_EQ(m2.At(1, 3), 8.0);
+    EXPECT_EQ(m2.At(2, 3), 12.0);
 }
 
 TEST(MatrixTest, CopyAssignment)
@@ -144,18 +144,18 @@ TEST(MatrixTest, MoveAssignment)
 
     EXPECT_EQ(m1.GetNumRows(), 3);
     EXPECT_EQ(m1.GetNumCols(), 4);
-    EXPECT_EQ(m1.GetElement(0, 0), 1.0);
-    EXPECT_EQ(m1.GetElement(0, 1), 2.0);
-    EXPECT_EQ(m1.GetElement(0, 2), 3.0);
-    EXPECT_EQ(m1.GetElement(0, 3), 4.0);
-    EXPECT_EQ(m1.GetElement(1, 0), 5.0);
-    EXPECT_EQ(m1.GetElement(1, 1), 6.0);
-    EXPECT_EQ(m1.GetElement(1, 2), 7.0);
-    EXPECT_EQ(m1.GetElement(1, 3), 8.0);
-    EXPECT_EQ(m1.GetElement(2, 0), 9.0);
-    EXPECT_EQ(m1.GetElement(2, 1), 10.0);
-    EXPECT_EQ(m1.GetElement(2, 2), 11.0);
-    EXPECT_EQ(m1.GetElement(2, 3), 12.0);
+    EXPECT_EQ(m1.At(0, 0), 1.0);
+    EXPECT_EQ(m1.At(0, 1), 2.0);
+    EXPECT_EQ(m1.At(0, 2), 3.0);
+    EXPECT_EQ(m1.At(0, 3), 4.0);
+    EXPECT_EQ(m1.At(1, 0), 5.0);
+    EXPECT_EQ(m1.At(1, 1), 6.0);
+    EXPECT_EQ(m1.At(1, 2), 7.0);
+    EXPECT_EQ(m1.At(1, 3), 8.0);
+    EXPECT_EQ(m1.At(2, 0), 9.0);
+    EXPECT_EQ(m1.At(2, 1), 10.0);
+    EXPECT_EQ(m1.At(2, 2), 11.0);
+    EXPECT_EQ(m1.At(2, 3), 12.0);
 }
 
 TEST(MatrixTest, Equality)
@@ -235,4 +235,170 @@ TEST(MatrixTest, MultiplicationByScalar)
     Matrix2<double> m2(3, 4, move(d2));
     EXPECT_EQ(m2, m1 * 2.0);
     EXPECT_EQ(m2, 2.0 * m1);
+}
+
+TEST(MatrixTest, Identity)
+{
+    Matrix2<double> m1(3, 3);
+    m1.SetToIdentity();
+    EXPECT_EQ(m1.At(0, 0), 1.0);
+    EXPECT_EQ(m1.At(1, 0), 0.0);
+    EXPECT_EQ(m1.At(2, 0), 0.0);
+    EXPECT_EQ(m1.At(0, 1), 0.0);
+    EXPECT_EQ(m1.At(1, 1), 1.0);
+    EXPECT_EQ(m1.At(2, 1), 0.0);
+    EXPECT_EQ(m1.At(0, 2), 0.0);
+    EXPECT_EQ(m1.At(1, 2), 0.0);
+    EXPECT_EQ(m1.At(2, 2), 1.0);
+
+    Matrix2<double> m2(3, 4);
+    EXPECT_THROW(m2.SetToIdentity(), std::invalid_argument);
+
+    Matrix2<double> m3(4, 3);
+    EXPECT_THROW(m3.SetToIdentity(), std::invalid_argument);
+}
+
+TEST(MatrixTest, Compare)
+{
+    std::vector<double> d1{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0 };
+    std::vector<double> d2{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0 };
+    std::vector<double> d3{ 1.0, 2.0, 3.0, 4.0, 1.0, 6.0, 7.0, 8.0, 9.0 };
+    Matrix2<double> m1(3, 3, move(d1));
+    Matrix2<double> m2(3, 3, move(d2));
+    Matrix2<double> m3(3, 3, move(d3));
+
+    EXPECT_TRUE(m1.Compare(m2, 0.001));
+    EXPECT_FALSE(m1.Compare(m3, 0.001));
+
+    // TBD
+}
+
+TEST(MatrixTest, Separate)
+{
+    std::vector<double> d1{ 1.0, 2.0, 3.0,
+                            4.0, 5.0, 6.0,
+                            7.0, 8.0, 9.0 };
+    Matrix2<double> m1(3, 3, move(d1));
+    Matrix2<double> m2;
+    Matrix2<double> m3;
+    m1.Separate(m2, m3, 2);
+    EXPECT_EQ(m2.At(0, 0), 1.0);
+    EXPECT_EQ(m2.At(1, 0), 4.0);
+    EXPECT_EQ(m2.At(2, 0), 7.0);
+    EXPECT_EQ(m2.At(0, 1), 2.0);
+    EXPECT_EQ(m2.At(1, 1), 5.0);
+    EXPECT_EQ(m2.At(2, 1), 8.0);
+    EXPECT_EQ(m3.At(0, 0), 3.0);
+    EXPECT_EQ(m3.At(1, 0), 6.0);
+    EXPECT_EQ(m3.At(2, 0), 9.0);
+    EXPECT_THROW(m1.Separate(m2, m3, 4), std::invalid_argument);
+}
+
+TEST(MatrixTest, Join)
+{
+    std::vector<double> d1{ 1.0, 2.0, 3.0,
+                            4.0, 5.0, 6.0,
+                            7.0, 8.0, 9.0 };
+    Matrix2<double> m1(3, 3, move(d1));
+    Matrix2<double> m2;
+    Matrix2<double> m3;
+    m1.Separate(m2, m3, 2);
+
+    m2.Join(m3);
+
+    EXPECT_EQ(m1, m2);
+}
+
+TEST(MatrixTest, SwapRows)
+{
+    std::vector<double> d1{ 1.0, 2.0, 3.0,
+                            4.0, 5.0, 6.0,
+                            7.0, 8.0, 9.0 };
+    Matrix2<double> m1(3, 3, move(d1));
+    m1.Swap(0, 2);
+
+    EXPECT_EQ(m1.At(0, 0), 7.0);
+    EXPECT_EQ(m1.At(0, 1), 8.0);
+    EXPECT_EQ(m1.At(0, 2), 9.0);
+    EXPECT_EQ(m1.At(1, 0), 4.0);
+    EXPECT_EQ(m1.At(1, 1), 5.0);
+    EXPECT_EQ(m1.At(1, 2), 6.0);
+    EXPECT_EQ(m1.At(2, 0), 1.0);
+    EXPECT_EQ(m1.At(2, 1), 2.0);
+    EXPECT_EQ(m1.At(2, 2), 3.0);
+}
+
+TEST(MatrixTest, MultAdd)
+{
+    std::vector<double> d1{ 1.0, 2.0, 3.0,
+                            4.0, 5.0, 6.0,
+                            7.0, 8.0, 9.0 };
+    Matrix2<double> m1(3, 3, move(d1));
+    m1.MultAdd(2, 0, -7);
+
+    EXPECT_EQ(m1.At(0, 0), 1.0);
+    EXPECT_EQ(m1.At(0, 1), 2.0);
+    EXPECT_EQ(m1.At(0, 2), 3.0);
+    EXPECT_EQ(m1.At(1, 0), 4.0);
+    EXPECT_EQ(m1.At(1, 1), 5.0);
+    EXPECT_EQ(m1.At(1, 2), 6.0);
+    EXPECT_EQ(m1.At(2, 0), 0.0);
+    EXPECT_EQ(m1.At(2, 1), -6.0);
+    EXPECT_EQ(m1.At(2, 2), -12.0);
+    EXPECT_THROW(m1.MultAdd(3, 0, -7), std::invalid_argument);
+    EXPECT_THROW(m1.MultAdd(9, 0, -7), std::invalid_argument);
+    EXPECT_THROW(m1.MultAdd(2, 3, -7), std::invalid_argument);
+    EXPECT_THROW(m1.MultAdd(2, 9, -7), std::invalid_argument);
+}
+
+TEST(MatrixTest, MultRow)
+{
+    std::vector<double> d1{ 1.0, 2.0, 3.0,
+                            4.0, 5.0, 6.0,
+                            7.0, 8.0, 9.0 };
+    Matrix2<double> m1(3, 3, move(d1));
+    m1.MultRow(2, 3);
+
+    EXPECT_EQ(m1.At(0, 0), 1.0);
+    EXPECT_EQ(m1.At(0, 1), 2.0);
+    EXPECT_EQ(m1.At(0, 2), 3.0);
+    EXPECT_EQ(m1.At(1, 0), 4.0);
+    EXPECT_EQ(m1.At(1, 1), 5.0);
+    EXPECT_EQ(m1.At(1, 2), 6.0);
+    EXPECT_EQ(m1.At(2, 0), 21.0);
+    EXPECT_EQ(m1.At(2, 1), 24.0);
+    EXPECT_EQ(m1.At(2, 2), 27.0);
+    EXPECT_THROW(m1.MultRow(3, 3), std::out_of_range);
+    EXPECT_THROW(m1.MultRow(9, 3), std::out_of_range);
+}
+
+TEST(MatrixTest, FindRowWithMaxElement)
+{
+    std::vector<double> d1{ 1.0, 8.0, 3.0,
+                            4.0, 5.0, 9.0,
+                            7.0, 2.0, 6.0 };
+    Matrix2<double> m1(3, 3, move(d1));
+
+    EXPECT_EQ(m1.FindRowWithMaxElement(0, 0), 2);
+    EXPECT_EQ(m1.FindRowWithMaxElement(1, 1), 1);
+    EXPECT_EQ(m1.FindRowWithMaxElement(2, 2), 2);
+    EXPECT_THROW(m1.FindRowWithMaxElement(3, 1), std::out_of_range);
+    EXPECT_THROW(m1.FindRowWithMaxElement(9, 1), std::out_of_range);
+    EXPECT_THROW(m1.FindRowWithMaxElement(2, 3), std::out_of_range);
+    EXPECT_THROW(m1.FindRowWithMaxElement(2, 9), std::out_of_range);
+}
+
+TEST(MatrixTest, Inverse)
+{
+    std::vector<double> d1{ 1.0, 2.0, 3.0,
+                            4.0, 5.0, 6.0,
+                            7.0, 15.0, 9.0 };
+    Matrix2<double> m1(3, 3, move(d1));
+    Matrix2<double> m2(m1);
+    Matrix2<double> identityMatrix(3, 3);
+    identityMatrix.SetToIdentity();
+
+    m1.Inverse();
+    auto m{ m1 * m2 };
+    EXPECT_EQ(m, identityMatrix);
 }
