@@ -61,5 +61,10 @@ or all elements are traversed. The one taking two matrices traverse the same row
 and for each calles the given function with both. The prurpose with these is to avoid the loops
 and hopefully makes the code more readable.
 
+The video implements two loops, one for rows and one for columns, to set the elements which is not
+one, to zero. I replaced that with a simple loop doing just that. I have no idea if I have missed
+something, but it seems to work for all testcases, even the 10 000 generated ones.
+
+7. version: Added tests which compare teh result with results generated from python.
 
 

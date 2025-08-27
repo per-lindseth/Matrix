@@ -708,14 +708,26 @@ namespace Math
     void Matrix2<T>::PrintMatrix() const
     {
         size_t count{ 0 };
+        bool first{ true };
         for (T element : m_matrixData)
         {
-            if (count == m_nCols)
+            if (first)
             {
-                count = 0;
-                std::cout << std::endl;
+                first = false;
             }
-            std::cout << std::format("{:3f} ", element);
+            else
+            {
+                if (count == m_nCols)
+                {
+                    count = 0;
+                    std::cout << ",\n";
+                }
+                else
+                {
+                    std::cout << ", ";
+                }
+            }
+            std::cout << std::format("{:.3f}", element);
             ++count;
         }
         std::cout << std::endl;
