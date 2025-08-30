@@ -402,3 +402,169 @@ TEST(MatrixTest, Inverse)
     auto m{ m1 * m2 };
     EXPECT_EQ(m, identityMatrix);
 }
+
+TEST(MatrixTest, FindSubMatrix)
+{
+    std::vector<double> d1{ 1.0, 2.0, 3.0,
+                            4.0, 5.0, 6.0,
+                            7.0, 15.0, 9.0 };
+    Matrix2<double> m1(3, 3, move(d1));
+    {
+        Matrix2<double> m2{ m1.FindSubMatrix(0, 0) };
+
+        EXPECT_EQ(m2.GetNumRows(), 2);
+        EXPECT_EQ(m2.GetNumCols(), 2);
+        EXPECT_EQ(m2(0, 0), 5);
+        EXPECT_EQ(m2(0, 1), 6);
+        EXPECT_EQ(m2(1, 0), 15);
+        EXPECT_EQ(m2(1, 1), 9);
+    }
+    {
+        Matrix2<double> m2{ m1.FindSubMatrix(0, 1) };
+
+        EXPECT_EQ(m2.GetNumRows(), 2);
+        EXPECT_EQ(m2.GetNumCols(), 2);
+        EXPECT_EQ(m2(0, 0), 4);
+        EXPECT_EQ(m2(0, 1), 6);
+        EXPECT_EQ(m2(1, 0), 7);
+        EXPECT_EQ(m2(1, 1), 9);
+    }
+    {
+        Matrix2<double> m2{ m1.FindSubMatrix(0, 2) };
+
+        EXPECT_EQ(m2.GetNumRows(), 2);
+        EXPECT_EQ(m2.GetNumCols(), 2);
+        EXPECT_EQ(m2(0, 0), 4);
+        EXPECT_EQ(m2(0, 1), 5);
+        EXPECT_EQ(m2(1, 0), 7);
+        EXPECT_EQ(m2(1, 1), 15);
+    }
+
+    {
+        Matrix2<double> m2{ m1.FindSubMatrix(1, 0) };
+
+        EXPECT_EQ(m2.GetNumRows(), 2);
+        EXPECT_EQ(m2.GetNumCols(), 2);
+        EXPECT_EQ(m2(0, 0), 2);
+        EXPECT_EQ(m2(0, 1), 3);
+        EXPECT_EQ(m2(1, 0), 15);
+        EXPECT_EQ(m2(1, 1), 9);
+    }
+    {
+        Matrix2<double> m2{ m1.FindSubMatrix(1, 1) };
+
+        EXPECT_EQ(m2.GetNumRows(), 2);
+        EXPECT_EQ(m2.GetNumCols(), 2);
+        EXPECT_EQ(m2(0, 0), 1);
+        EXPECT_EQ(m2(0, 1), 3);
+        EXPECT_EQ(m2(1, 0), 7);
+        EXPECT_EQ(m2(1, 1), 9);
+    }
+    {
+        Matrix2<double> m2{ m1.FindSubMatrix(1, 2) };
+
+        EXPECT_EQ(m2.GetNumRows(), 2);
+        EXPECT_EQ(m2.GetNumCols(), 2);
+        EXPECT_EQ(m2(0, 0), 1);
+        EXPECT_EQ(m2(0, 1), 2);
+        EXPECT_EQ(m2(1, 0), 7);
+        EXPECT_EQ(m2(1, 1), 15);
+    }
+
+    {
+        Matrix2<double> m2{ m1.FindSubMatrix(2, 0) };
+
+        EXPECT_EQ(m2.GetNumRows(), 2);
+        EXPECT_EQ(m2.GetNumCols(), 2);
+        EXPECT_EQ(m2(0, 0), 2);
+        EXPECT_EQ(m2(0, 1), 3);
+        EXPECT_EQ(m2(1, 0), 5);
+        EXPECT_EQ(m2(1, 1), 6);
+    }
+    {
+        Matrix2<double> m2{ m1.FindSubMatrix(2, 1) };
+
+        EXPECT_EQ(m2.GetNumRows(), 2);
+        EXPECT_EQ(m2.GetNumCols(), 2);
+        EXPECT_EQ(m2(0, 0), 1);
+        EXPECT_EQ(m2(0, 1), 3);
+        EXPECT_EQ(m2(1, 0), 4);
+        EXPECT_EQ(m2(1, 1), 6);
+    }
+    {
+        Matrix2<double> m2{ m1.FindSubMatrix(2, 2) };
+
+        EXPECT_EQ(m2.GetNumRows(), 2);
+        EXPECT_EQ(m2.GetNumCols(), 2);
+        EXPECT_EQ(m2(0, 0), 1);
+        EXPECT_EQ(m2(0, 1), 2);
+        EXPECT_EQ(m2(1, 0), 4);
+        EXPECT_EQ(m2(1, 1), 5);
+    }
+}
+
+
+TEST(MatrixTest, Determinat)
+{
+    {
+        std::vector<double> d3{ 2.0, 1.0, 1.0,
+                                1.0, 0.0, 1.0,
+                                0.0, 3.0, 1.0 };
+        Matrix2<double> m3(3, 3, move(d3));
+        {
+            Matrix2<double> m2{ m3.FindSubMatrix(0, 0) };
+            EXPECT_EQ(m2.Determinant(), 0 * 1 - 1 * 3);
+        }
+        {
+            Matrix2<double> m2{ m3.FindSubMatrix(0, 1) };
+            EXPECT_EQ(m2.Determinant(), 1 * 1 - 1 * 0);
+        }
+        {
+            Matrix2<double> m2{ m3.FindSubMatrix(0, 2) };
+            EXPECT_EQ(m2.Determinant(), 1 * 3 - 0 * 0);
+        }
+        {
+            Matrix2<double> m2{ m3.FindSubMatrix(1, 0) };
+            EXPECT_EQ(m2.Determinant(), 1 * 1 - 1 * 3);
+        }
+        {
+            Matrix2<double> m2{ m3.FindSubMatrix(1, 1) };
+            EXPECT_EQ(m2.Determinant(), 2 * 1 - 1 * 0);
+        }
+        {
+            Matrix2<double> m2{ m3.FindSubMatrix(1, 2) };
+            EXPECT_EQ(m2.Determinant(), 2 * 3 - 1 * 0);
+        }
+        {
+            Matrix2<double> m2{ m3.FindSubMatrix(2, 0) };
+            EXPECT_EQ(m2.Determinant(), 1 * 1 - 1 * 0);
+        }
+        {
+            Matrix2<double> m2{ m3.FindSubMatrix(2, 1) };
+            EXPECT_EQ(m2.Determinant(), 2 * 1 - 1 * 1);
+        }
+        {
+            Matrix2<double> m2{ m3.FindSubMatrix(2, 2) };
+        }
+        EXPECT_EQ(m3.Determinant(), -4);
+    }
+    {
+        std::vector<double> d5{ 2.0, 3.0, 4.0, 5.0, 6.0,
+                                1.0, 2.0, 3.0, 4.0, 5.0,
+                                9.0, 5.0, 3.0, 2.0, 6.0,
+                                2.0, 4.0, 6.0, 5.0, 1.0,
+                                1.0, 7.0, 5.0, 2.0, 3.0 };
+        Matrix2<double> m5(5, 5, move(d5));
+        EXPECT_EQ(m5.Determinant(), -126);
+    }
+    {
+        // Singular matrix
+        std::vector<double> d3{ 1.0, 1.0, 1.0,
+                                0.0, 1.0, 0.0,
+                                1.0, 0.0, 1.0 };
+        Matrix2<double> m3(3, 3, move(d3));
+        EXPECT_EQ(m3.Determinant(), 0);
+    }
+
+
+}

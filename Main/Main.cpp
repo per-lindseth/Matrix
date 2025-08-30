@@ -1,8 +1,15 @@
 // Main.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
+#include <array>
 #include <iostream>
+#include <list>
+#include <ranges>
+#include <vector>
+
+
 #include "Matrix.h"
+#include "Vector.h"
 
 using namespace std;
 using namespace Math;
@@ -14,7 +21,7 @@ void test()
     // ************************************************************************
     // Create an instance of the Matrix2 class.
     // This will contain a simple 2D 3x3 matrix.
-    std::vector<double> simpleData { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
+    std::vector<double> simpleData{ 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0 };
     Matrix2<double> testMatrix(3, 4, simpleData);
 
     // Extract and print the elements of testMatrix
@@ -136,51 +143,73 @@ void PrintVector(std::vector<T> v)
     for (size_t i{ 0 }; i < s; ++i)
     {
         cout << v[i] << " ";
-        if ((i+1) % 10 == 0)
+        if ((i + 1) % 10 == 0)
             cout << endl;
     }
     cout << endl;
 }
+void print(auto const rem, auto const& r)
+{
+    std::cout << rem << '{';
+    for (char o[]{ 0,' ',0 }; auto const& e : r)
+        std::cout << o << e, * o = ',';
+    std::cout << "}\n";
+}
+
+void test2()
+{
+    const std::vector<double> testData1{ 1.0, 2.0, 3.0 };
+    const Vector<double> testVector1(testData1);
+    std::cout << "testVector 1: ";
+    testVector1.PrintVector();
+
+    const std::vector<double> testData2{ 2.0, 4.0, 6.0 };
+    const Vector<double> testVector2(testData2);
+    std::cout << "testVector 2: ";
+    testVector2.PrintVector();
+
+    const auto testVector3{testVector1 + testVector2};
+    std::cout << "testVector 3: ";
+    testVector3.PrintVector();
+
+    const auto testVector4{ testVector2 - testVector1 };
+    std::cout << "testVector 4: ";
+    testVector4.PrintVector();
+
+    const auto testVector5{ testVector1 * 2.0 };
+    std::cout << "testVector 5: ";
+    testVector5.PrintVector();
+
+    const auto testVector6{ 2.0 * testVector1 };
+    std::cout << "testVector 6: ";
+    testVector6.PrintVector();
+
+    const auto dot1{ Vector<double>::Dot(testVector1, testVector2) };
+    std::cout << "dot 1       : ";
+    std::cout << dot1 << std::endl;
+
+    const auto testVector7{ Vector<double>::Cross(testVector1, testVector2) };
+    std::cout << "testVector 7: ";
+    testVector7.PrintVector();
+
+    const std::vector<double> testData8{ -1.0, 5.0, -3.2 };
+    const Vector<double> testVector8(testData8);
+    std::cout << "testVector 8: ";
+    testVector8.PrintVector();
+
+    const auto testVector9{ Vector<double>::Cross(testVector1, testVector8) };
+    std::cout << "testVector 9: ";
+    testVector9.PrintVector();
+
+    const auto dot2{ Vector<double>::Dot(testVector1, testVector8) };
+    std::cout << "dot 2       : ";
+    std::cout << dot2 << std::endl;
+}
 
 int main()
 {
-    std::vector<double> d1{ -7.000, 5.000, - 5.000, 9.000, - 3.000,
-                             8.000, 3.000, 6.000, 4.000, - 7.000,
-                           - 1.000, 5.000, 2.000, - 6.000, 9.000,
-                           - 4.000, 6.000, - 5.000, - 2.000, 4.000, 
-                           - 1.000, - 7.000, 7.000, 9.000, - 4.000 
-    };
-    Matrix2<double> m1(5, 5, move(d1));
-    Matrix2<double> m2(m1);
-    m1.PrintMatrix();
-    if (m1.Inverse())
-    {
-        cout << "Matrix inversed!\n";
-    }
-    else
-    {
-        cout << "Matrix faled to inversed!\n";
-    }
-    m1.PrintMatrix();
-
-    auto m{ m1 * m2 };
-
-    cout << endl;
-
-    m.PrintMatrix();
-        
     //test();
+    test2();
     return 0;
 }
-//- 7.000 5.000 - 5.000 9.000 - 3.000 1497.333 - 463.667 1094.333 - 3487.333 - 1336.667
-//8.000 3.000 6.000 4.000 - 7.000 - 360.333 111.667 - 263.333 839.333 321.667
-//- 1.000 5.000 2.000 - 6.000 9.000 - 988.000 306.000 - 722.000 2301.000 882.000
-//- 4.000 6.000 - 5.000 - 2.000 4.000 1300.333 - 402.667 950.333 - 3028.333 - 1160.667
-//- 1.000 - 7.000 7.000 9.000 - 4.000 1453.000 - 450.000 1062.000 - 3384.000 - 1297.000
-//
-//2.000 8.000 7.000 1.000 - 3.000 - 385.000 195.000 476.000 1077.000 223.000
-//8.000 - 8.000 - 7.000 2.000 2.000 - 404.000 204.500 499.500 1130.000 234.000
-//- 4.000 6.000 - 7.000 6.000 - 2.000 974.000 - 493.000 - 1204.000 - 2724.000 - 564.000
-//0.000 0.000 5.000 - 1.000 - 2.000 1796.000 - 909.000 - 2220.000 - 5023.000 - 1040.000
-//5.000 8.000 9.000 - 8.000 7.000 1537.000 - 778.000 - 1900.000 - 4299.000 - 890.000
 

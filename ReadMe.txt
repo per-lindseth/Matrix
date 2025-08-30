@@ -70,6 +70,7 @@ something, but it seems to work for all testcases, even the 10 000 generated one
 8. Added Determinant
 This commit may be incomplete. The next will be ok
 
-
+9. Implementet Vector
+Vector is implementet togethet with tests and code in main printing out results
 
 
