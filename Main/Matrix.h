@@ -101,6 +101,9 @@ namespace Math
         // Manipulation methods
         bool Inverse();
 
+        // Compute the determinat
+        T Determinant() const;
+
         // overload = operator
         Matrix2<T>& operator=(const Matrix2<T>& rhs) = default;
         Matrix2<T>& operator=(Matrix2<T>&& rhs)noexcept = default;
@@ -138,7 +141,9 @@ namespace Math
         void MultRow(size_t toRow, T multFactor);
         void Join(const Matrix2<T>& other);
         size_t FindRowWithMaxElement(size_t colNumber, size_t startingRow);
+        Matrix2<T> FindSubMatrix(size_t rowNum, size_t colNum) const;
         void PrintMatrix() const;
+        void PrintMatrixChar() const;
     };
 
     // Define the various constructors
@@ -399,7 +404,7 @@ namespace Math
             }
 
             // Make sure the value at [cRow, cCol] == 1
-            if (const auto elementValue =self(cRow, cCol); elementValue != 1.0)
+            if (const auto elementValue = self(cRow, cCol); elementValue != 1.0)
             {
                 if (CloseEnough(elementValue, 0.0))
                 {
@@ -427,6 +432,57 @@ namespace Math
             return true;
         }
         return false;
+    }
+
+    template <typename T>
+    T Matrix2<T>::Determinant() const
+    {
+        // Check if the matrix is square.
+        if (!IsSquare())
+        {
+            throw std::invalid_argument("Cannot compute the determinat of a matrix that is not square.");
+        }
+        const auto& self{ *this };
+
+        // If the matrix is 2x2 we can simply compute the determinat directly
+        if (m_nRows == 2)
+        {
+            return self(0, 0) * self(1, 1) - self(0, 1) * self(1, 0);
+        }
+
+        // If the matrix is 3x3 we can simply compute the determinat directly
+        if (m_nRows == 3)
+        {
+            return self(0, 0) * self(1, 1) * self(2, 2)                 
+                 + self(0, 1) * self(1, 2) * self(2, 0)
+                 + self(0, 2) * self(1, 0) * self(2, 1)
+                 - self(0, 2) * self(1, 1) * self(2, 0)
+                 - self(0, 0) * self(1, 2) * self(2, 1)
+                 - self(0, 1) * self(1, 0) * self(2, 2);
+        }
+
+        // Otherwise we extract the sub-matrices and then recursivly cll this function
+        // until we get a 2x2 matrix
+
+        // We will find the sub-matrix for row 0
+        // So, loop over each column
+
+        T cumulativeSum{ 0.0 };
+        T sign{ 1.0 };
+        for (size_t j{ 0 }; j < m_nCols; ++j)
+        {
+            // And find the sub-matrix for each element
+            Matrix2<T> subMatrix{FindSubMatrix(0,j)};
+
+            // Cummulative multiply the determinat of the sub-matrix by the 
+            // current element of this matrix and the sign variable (note the
+            // recursive calling of Determinat() method.)
+            const auto s{ subMatrix.Determinant() };
+            std::cout << std::format("[{}, {}] * {} * {} \n", 0, j, s, sign);
+            cumulativeSum += self(0, j) * s * sign;
+            sign = -sign;
+        }
+        return cumulativeSum;
     }
 
     // overload == operator
@@ -705,6 +761,30 @@ namespace Math
     }
 
     template <class T>
+    Matrix2<T> Matrix2<T>::FindSubMatrix(const size_t rowNum, const size_t colNum) const
+    {
+        // Create a new matrix to store the subMatrix
+        // Note that this is one row and one colum smaller than the original.
+        Matrix2<T> subMatrix(m_nRows - 1, m_nCols - 1);
+
+        // Loop over the elements of the existing matrix and copy to subMatrix as appropriate
+        ForEachElementRowFirst([&](const size_t row, const size_t column, const T& element) -> bool
+            {
+                if (row == rowNum || column == colNum)
+                {
+                    return false; // continue
+                }
+                size_t r{ row < rowNum ? row : row - 1 };
+                size_t c{ column < colNum ? column : column - 1 };
+                subMatrix(r, c) = element;
+                return false; // continue
+            }
+        );
+
+        return subMatrix;
+    }
+
+    template <class T>
     void Matrix2<T>::PrintMatrix() const
     {
         size_t count{ 0 };
@@ -728,6 +808,35 @@ namespace Math
                 }
             }
             std::cout << std::format("{:.3f}", element);
+            ++count;
+        }
+        std::cout << std::endl;
+    }
+
+    template <class T>
+    void Matrix2<T>::PrintMatrixChar() const
+    {
+        size_t count{ 0 };
+        bool first{ true };
+        for (T element : m_matrixData)
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                if (count == m_nCols)
+                {
+                    count = 0;
+                    std::cout << ",\n";
+                }
+                else
+                {
+                    std::cout << ", ";
+                }
+            }
+            std::cout << std::format("{}", static_cast<char>(element));
             ++count;
         }
         std::cout << std::endl;

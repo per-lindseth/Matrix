@@ -67,4 +67,9 @@ something, but it seems to work for all testcases, even the 10 000 generated one
 
 7. version: Added tests which compare teh result with results generated from python.
 
+8. Added Determinant
+This commit may be incomplete. The next will be ok
+
+
+
 
