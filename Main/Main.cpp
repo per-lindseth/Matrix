@@ -168,7 +168,7 @@ void test2()
     std::cout << "testVector 2: ";
     testVector2.PrintVector();
 
-    const auto testVector3{testVector1 + testVector2};
+    const auto testVector3{ testVector1 + testVector2 };
     std::cout << "testVector 3: ";
     testVector3.PrintVector();
 
@@ -204,6 +204,34 @@ void test2()
     const auto dot2{ Vector<double>::Dot(testVector1, testVector8) };
     std::cout << "dot 2       : ";
     std::cout << dot2 << std::endl;
+
+    std::cout << "testVector 1 length: " << testVector1.Norm() << std::endl;
+    std::cout << "testVector 2 length: " << testVector2.Norm() << std::endl;
+    std::cout << "testVector 8 length: " << testVector8.Norm() << std::endl;
+
+    const Vector<double> normalizedVector1{ testVector1.Normalized() };
+    std::cout << "normalizedVector 1: ";
+    normalizedVector1.PrintVector();
+    const Vector<double> normalizedVector2{ testVector2.Normalized() };
+    std::cout << "normalizedVector 2: ";
+    normalizedVector2.PrintVector();
+    const Vector<double> normalizedVector8{ testVector8.Normalized() };
+    std::cout << "normalizedVector 8: ";
+    normalizedVector8.PrintVector();
+
+    Vector<double> testVector1Copy{ testVector1 };
+    testVector1Copy.Normalize();
+    std::cout << "normalizedVector 1 in place: ";
+    testVector1Copy.PrintVector();
+
+    std::vector<double> testDataM{ 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0 };
+    Matrix2<double> testMatrix(3, 3, std::move(testDataM));
+    std::cout << "testMatrix: \n";
+    testMatrix.PrintMatrix();
+
+    Vector<double> matrixMult1{ testMatrix * testVector1Copy };
+    std::cout << "matrixMult1: ";
+    matrixMult1.PrintVector();
 }
 
 int main()

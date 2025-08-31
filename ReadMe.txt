@@ -66,11 +66,25 @@ one, to zero. I replaced that with a simple loop doing just that. I have no idea
 something, but it seems to work for all testcases, even the 10 000 generated ones.
 
 7. version: Added tests which compare teh result with results generated from python.
+------------------------------------------------------------------------------------
 
 8. Added Determinant
 This commit may be incomplete. The next will be ok
+--------------------------------------------------
 
 9. Implementet Vector
+-------------------------
 Vector is implementet togethet with tests and code in main printing out results
+
+10. Extended Vector
+------------------
+Made som function in Matrix2 as inline and added a member function AsVector, returning a std::vector.
+
+Extended Norm() and Normalice()/Normalized() functions as well as convertion routines to Matrix2.
+
+Added a global function : Matrix2 x Vector --> Vector
+
+Added a few helper operators and functions
+
 
 

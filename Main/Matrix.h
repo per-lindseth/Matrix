@@ -10,7 +10,7 @@
 namespace Math
 {
 
-    void pause()
+    inline void pause()
     {
         std::cout << "Enter any to continue: ";
         char dmy;
@@ -18,7 +18,7 @@ namespace Math
     }
 
     template <typename Range>
-    auto to_vector(Range&& r) {
+    inline auto to_vector(Range&& r) {
 #if __cpp_lib_ranges_to_container >= 202202L // C++23 check
         return std::ranges::to<std::vector>(std::forward<Range>(r));
 #else
@@ -28,7 +28,7 @@ namespace Math
     }
 
     template <typename T>
-    std::vector<T> zip(const std::vector<T>& lhs, const std::vector<T>& rhs, const std::function<T(T, T)>& func)
+    inline std::vector<T> zip(const std::vector<T>& lhs, const std::vector<T>& rhs, const std::function<T(T, T)>& func)
     {
         return to_vector(
             std::views::iota(size_t{ 0 }, lhs.size())
@@ -39,7 +39,7 @@ namespace Math
     }
 
     template <typename T>
-    std::vector<T> zip(const T& lhs, const std::vector<T>& rhs, const std::function<T(T, T)>& func)
+    inline std::vector<T> zip(const T& lhs, const std::vector<T>& rhs, const std::function<T(T, T)>& func)
     {
         return to_vector(
             std::views::iota(size_t{ 0 }, rhs.size())
@@ -50,7 +50,7 @@ namespace Math
     }
 
     template <typename T>
-    std::vector<T> zip(const std::vector<T>& lhs, T rhs, const std::function<T(T, T)>& func)
+    inline std::vector<T> zip(const std::vector<T>& lhs, T rhs, const std::function<T(T, T)>& func)
     {
         return to_vector(
             std::views::iota(size_t{ 0 }, lhs.size())
@@ -127,6 +127,9 @@ namespace Math
         template <class U> friend Matrix2<U> operator* (const Matrix2<U>& lhs, const U& rhs);
 
         void Separate(Matrix2<T>& lhs, Matrix2<T>& rhs, size_t colNum);
+
+        // Conversion rutines
+        std::vector<T> AsVector() const;
 
     private:
         std::vector<T> m_matrixData{ 1 };
@@ -658,6 +661,12 @@ namespace Math
     }
 
     template <class T>
+    std::vector<T> Matrix2<T>::AsVector() const
+    {
+        return m_matrixData;
+    }
+
+    template <class T>
     bool Matrix2<T>::IsSquare() const
     {
         return m_nRows == m_nCols;
@@ -766,9 +775,9 @@ namespace Math
         // Create a new matrix to store the subMatrix
         // Note that this is one row and one colum smaller than the original.
         Matrix2<T> subMatrix(m_nRows - 1, m_nCols - 1);
+        ForEachElementRowFirst([&](const size_t row, const size_t column, const T& element) -> bool
 
         // Loop over the elements of the existing matrix and copy to subMatrix as appropriate
-        ForEachElementRowFirst([&](const size_t row, const size_t column, const T& element) -> bool
             {
                 if (row == rowNum || column == colNum)
                 {
