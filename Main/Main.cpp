@@ -4,6 +4,7 @@
 #include <array>
 #include <iostream>
 #include <list>
+#include <random>
 #include <ranges>
 #include <vector>
 
@@ -234,10 +235,224 @@ void test2()
     matrixMult1.PrintVector();
 }
 
+void test3()
+{
+    std::vector<double> simpleData1{ 1.0, 2.0, 3.0,
+                                     1.0, 2.0, 3.0,
+                                     1.0, 2.0, 3.0 };
+    Matrix2<double> testMatrix1(3, 3, simpleData1);
+    std::cout << "testMatrix 1: \n";
+    testMatrix1.PrintMatrix();
+    std::cout << std::format("testMatrix 1 is{} in row echelon form\n", (testMatrix1.IsRowEchelon() ? "" : " not"));
+    std::cout << std::endl;
+
+    std::vector<double> simpleData2{ 1.0, 2.0, 3.0,
+                                     0.0, 2.0, 3.0,
+                                     0.0, 0.0, 3.0 };
+    Matrix2<double> testMatrix2(3, 3, simpleData2);
+    std::cout << "testMatrix 2: \n";
+    testMatrix2.PrintMatrix();
+    std::cout << std::format("testMatrix 2 is{} in row echelon form\n", (testMatrix2.IsRowEchelon() ? "" : " not"));
+    std::cout << std::endl;
+
+    std::vector<double> simpleData3{ 1.0, 1.0, 2.0, 9.0,
+                                     2.0, 4.0, -3.0, 1.0,
+                                     3.0, 6.0, -5.0, 0.0 };
+    Matrix2<double> testMatrix3(3, 4, simpleData3);
+    std::cout << "testMatrix 3: \n";
+    testMatrix3.PrintMatrix();
+    std::cout << std::endl;
+
+    Matrix2<double> testMatrix4{ testMatrix3.RowEchelon() };
+    std::cout << "testMatrix 4: \n";
+    testMatrix4.PrintMatrix();
+    std::cout << std::endl;
+
+    std::vector<double> simpleData5{ 0.0, 1.0, 2.0, 9.0,
+                                     2.0, 0.0, -3.0, 1.0,
+                                     3.0, 6.0, -5.0, 0.0 };
+    Matrix2<double> testMatrix5(3, 4, simpleData5);
+    std::cout << "testMatrix 5: \n";
+    testMatrix5.PrintMatrix();
+    std::cout << std::endl;
+
+    Matrix2<double> testMatrix6{ testMatrix5.RowEchelon() };
+    std::cout << "testMatrix 6: \n";
+    testMatrix6.PrintMatrix();
+    std::cout << std::endl;
+    {
+        std::vector<double> simpleData7{ 1, 3, -1, 13,
+                                         4, -1, 1, 9,
+                                         2, 4, 3, -6 };
+        Matrix2<double> testMatrix8(3, 4, simpleData7);
+        std::cout << "testMatrix 8: \n";
+        testMatrix8.PrintMatrix();
+        std::cout << std::endl;
+
+        Matrix2<double> testMatrix9{ testMatrix8.RowEchelon() };
+        std::cout << "testMatrix 9: \n";
+        testMatrix9.PrintMatrix();
+        std::cout << std::endl;
+
+        Matrix2<double> testMatrix10; // 3x3 matrix
+        Matrix2<double> testMatrix11; // 3x1 matrix
+        testMatrix8.Separate(testMatrix10, testMatrix11, 3);
+        std::cout << "testMatrix 10: \n";
+        testMatrix10.PrintMatrix();
+        std::cout << std::endl;
+        std::cout << "testMatrix 11: \n";
+        testMatrix11.PrintMatrix();
+        std::cout << std::endl;
+        Vector<double> testVector{ testMatrix11.AsVector() };
+        std::cout << "testVector: \n";
+        testVector.PrintVector();
+        std::cout << std::endl;
+
+        auto result{ linear_solve(testMatrix10, testVector) };
+
+        std::cout << "result Vector: \n";
+        result.PrintVector();
+        std::cout << std::endl;
+
+        std::cout << std::endl;
+    }
+    {
+        std::vector<double> simpleData7{ 2, -1, 7, 2,
+                                         4, 2, 2, 5,
+                                         3, 1, 3, 1 };
+        Matrix2<double> testMatrix8(3, 4, simpleData7);
+        std::cout << "testMatrix 8: \n";
+        testMatrix8.PrintMatrix();
+        std::cout << std::endl;
+
+        Matrix2<double> testMatrix9{ testMatrix8.RowEchelon() };
+        std::cout << "testMatrix 9: \n";
+        testMatrix9.PrintMatrix();
+        std::cout << std::endl;
+
+        Matrix2<double> testMatrix10; // 3x3 matrix
+        Matrix2<double> testMatrix11; // 3x1 matrix
+        testMatrix8.Separate(testMatrix10, testMatrix11, 3);
+        std::cout << "testMatrix 10: \n";
+        testMatrix10.PrintMatrix();
+        std::cout << std::endl;
+        std::cout << "testMatrix 11: \n";
+        testMatrix11.PrintMatrix();
+        std::cout << std::endl;
+        Vector<double> testVector{ testMatrix11.AsVector() };
+        std::cout << "testVector: \n";
+        testVector.PrintVector();
+        std::cout << std::endl;
+
+        auto result{ linear_solve(testMatrix10, testVector) };
+
+        std::cout << "result Vector: \n";
+        result.PrintVector();
+        std::cout << std::endl;
+
+        std::cout << std::endl;
+    }
+    {
+        std::vector<double> testData{ 1.0, 3.0, -1.0, 13.0,
+                                        4.0, -1.0, 1.0, 9.0,
+                                        2.0, 4.0, 3.0, -6.0 };
+        Matrix2<double> testMatrix(3, 4, testData);
+
+        std::vector<double> expectedData{ 1.0, 3.0, -1.0, 13.0,
+                                          0.0, -13.0, 5.0, -43.0,
+                                          0.0, 0.0, 4.231, -25.385 };
+        Matrix2<double> expectedMatrix(3, 4, expectedData);
+
+        Matrix2<double> rowEchelonMatrix{ testMatrix.RowEchelon() };
+        rowEchelonMatrix.PrintMatrix();
+
+    }
+}
+
+#include <string>
+using namespace std;
+
+
+void permute(vector<size_t>& arr, size_t l, size_t r) {
+    if (l == r) {
+        for (size_t c : arr) {
+            cout << c << " ";
+        }
+        cout << endl;
+    }
+    else {
+        for (size_t i = l; i <= r; i++) {
+            swap(arr[l], arr[i]);          // swap current element
+            permute(arr, l + 1, r);        // recurse
+            swap(arr[l], arr[i]);          // backtrack
+        }
+    }
+}
+void test4()
+{
+    vector<size_t> elements = { 0, 1, 2, 3 };
+    permute(elements, 0, elements.size() - 1);
+
+}
+void test5()
+{
+    std::random_device myRandomDevice;
+    std::mt19937 myRandomGenerator(myRandomDevice());
+    std::uniform_real_distribution<double> myDistribution(-25.0, 25.0);
+
+    size_t numUnknowns{ 10 };
+
+    std::vector<double> coefficientData;
+    std::vector<double> unknownData;
+
+    // Populate the coefficientData
+    for (size_t i{ 0 }; i < (numUnknowns * numUnknowns); ++i)
+    {
+        double randomNumber{ myDistribution(myRandomGenerator) };
+        coefficientData.push_back(randomNumber);
+    }
+    //cout << "A random coefficient matrix = \n";
+    Matrix2<double> coefficientMatrix(numUnknowns, numUnknowns, coefficientData);
+    //coefficientMatrix.PrintMatrix();
+    //cout << endl;
+
+    // And the random unknown values
+
+    //cout << "And the random unknown values\n";
+    for (size_t i{ 0 }; i < numUnknowns; ++i)
+    {
+        double randomNumber{ myDistribution(myRandomGenerator) };
+        unknownData.push_back(randomNumber);
+    }
+    Vector<double> unknownVector(unknownData);
+    //unknownVector.PrintVector();
+    //cout << endl;
+
+    //cout << "Compute the equation result =\n";
+    Vector<double> systemResult{ coefficientMatrix * unknownVector };
+    //systemResult.PrintVector();
+    //cout << endl;
+
+    //cout << "Attemt to solved the linear system...\n";
+    Vector<double> compSolution{ linear_solve(coefficientMatrix, systemResult) };
+    //systemResult.PrintVector();
+    //cout << endl;
+
+    //cout << "And compare the actual result with the computed solution...\n";
+    Vector<double> errorVector{ unknownVector - compSolution };
+    errorVector.PrintVector();
+    cout << endl;
+
+
+}
+
 int main()
 {
     //test();
-    test2();
+    //test2();
+    test3();
+    //test4();
+    //test5();
     return 0;
 }
 

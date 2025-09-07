@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "../Main/Vector.h"
+#include <random>
 
 using namespace Math;
 
@@ -177,3 +178,55 @@ TEST(VectorTest, Normalize) {
     EXPECT_TRUE(CloseEnough(normalizedVector3.GetELement(1), 0.83056936773136925));
     EXPECT_TRUE(CloseEnough(normalizedVector3.GetELement(2), -0.53156439534807631));
 }
+
+
+TEST(VectorTest, LinearSolve) {
+    for (size_t count{ 0 }; count < 100; ++count)
+    {
+        std::random_device myRandomDevice;
+        std::mt19937 myRandomGenerator(myRandomDevice());
+        std::uniform_real_distribution<double> myDistribution(-25.0, 25.0);
+
+        size_t numUnknowns{ 10 };
+
+        std::vector<double> coefficientData;
+        std::vector<double> unknownData;
+
+        // Populate the coefficientData
+        for (size_t i{ 0 }; i < (numUnknowns * numUnknowns); ++i)
+        {
+            double randomNumber{ myDistribution(myRandomGenerator) };
+            coefficientData.push_back(randomNumber);
+        }
+        // A random coefficient matrix
+        Matrix2<double> coefficientMatrix(numUnknowns, numUnknowns, coefficientData);
+
+        // And the random unknown values
+        for (size_t i{ 0 }; i < numUnknowns; ++i)
+        {
+            double randomNumber{ myDistribution(myRandomGenerator) };
+            unknownData.push_back(randomNumber);
+        }
+        Vector<double> unknownVector(unknownData);
+
+        // Compute the equation result
+        Vector<double> systemResult{ coefficientMatrix * unknownVector };
+
+        // Attemt to solved the linear system...
+        Vector<double> compSolution{ linear_solve(coefficientMatrix, systemResult) };
+
+        // And compare the actual result with the computed solution...
+        Vector<double> errorVector{ unknownVector - compSolution };
+
+        for (size_t i{ 0 }; i < numUnknowns; ++i)
+        {
+            bool test{ fabs(errorVector.GetELement(i)) < 1e-6 };
+            if (!test)
+            {
+                EXPECT_TRUE(test);
+            }
+            EXPECT_TRUE(test);
+        }
+    }
+}
+

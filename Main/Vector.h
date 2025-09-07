@@ -79,6 +79,7 @@ namespace Math
     template <typename U> Vector<U> operator/(const U& factor, const Vector<U>& rhs);
 
     template <typename U> Vector<U> operator*(const Matrix2<U>& matrix, const Vector<U>& rhs);
+    template <typename U> Vector<U> linear_solve(const Matrix2<U>& matrix, const Vector<U>& rhs);
 
     template <typename T>
     Vector<T>::Vector(const std::vector<T>& inputData)
@@ -148,7 +149,7 @@ namespace Math
         const T vectNorm{ Norm() };
 
         // Function to normalize an element
-        const auto normalizeElement{ [vectNorm](T x) -> T { return x/vectNorm; } };
+        const auto normalizeElement{ [vectNorm](T x) -> T { return x / vectNorm; } };
 
         // Perfor the normalizeElement transformation on each element
         Transform(normalizeElement);
@@ -353,16 +354,64 @@ namespace Math
         // Verify the dimensions of the input
         if (lhs.GetNumCols() != vec.GetNumDims())
         {
-            throw std::invalid_argument("Number of columns in matrix equal number of rows in vector.");
+            throw std::invalid_argument("Number of columns in matrix must equal number of rows in vector.");
         }
 
         const Matrix2<U> rhs{ vec.AsMatrix2WithSingleColumn() };
 
-        const Matrix2<U> resultMatrix{lhs * rhs};
+        const Matrix2<U> resultMatrix{ lhs * rhs };
 
-        Vector<U> resultVector{ resultMatrix.AsVector()};
+        Vector<U> resultVector{ resultMatrix.AsVector() };
 
         return resultVector;
+    }
+
+    template <typename U> Vector<U> linear_solve(const Matrix2<U>& matrix, const Vector<U>& vec)
+    {
+        // Verify the dimensions of the input
+        if (matrix.GetNumRows() != vec.GetNumDims())
+        {
+            throw std::invalid_argument("Number of rows in matrix must equal number of rows in vector.");
+        }
+
+        // Convert inpyt vector to a n x 1 matrix
+        auto vecAsMatrix{ vec.AsMatrix2WithSingleColumn() };
+
+        // Create an augmented matrix
+        Matrix2<U> augmentedMatrix(matrix);
+        augmentedMatrix.Join(vecAsMatrix);
+        // Transform the augemented matrix into row echelon form
+        Matrix2<U> rowEchelonMatrix{ augmentedMatrix.RowEchelon() };
+
+        Vector<U> output{ vec };
+
+        size_t numRows{ rowEchelonMatrix.GetNumRows() };
+        size_t numCols{ rowEchelonMatrix.GetNumCols() };
+        size_t startRow{ numRows - 1 };
+
+        // Loop over the rows in reverse order
+        for (int ii{ static_cast<int>(startRow) }; ii >= 0; --ii)
+        {
+            size_t i{static_cast<size_t>(ii)};
+
+            // Extract the current result for this row
+            U currentResult{ rowEchelonMatrix(i, numCols - 1) };
+
+            // Compute the cumulative sum.
+            U cumulativSum{};
+            for (size_t j{ i + 1 }; j < numRows; ++j)
+            {
+                cumulativSum += rowEchelonMatrix(i, j) * output.GetELement(j);
+            }
+
+            // Cumpute the answer.
+            U finalAnswer{ (currentResult - cumulativSum) / rowEchelonMatrix(i, i) };
+
+            // And store.
+            output.SetElement(i, finalAnswer);
+        }
+
+        return output;
     }
 
 }

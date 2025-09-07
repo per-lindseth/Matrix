@@ -100,6 +100,7 @@ namespace Math
 
         // Manipulation methods
         bool Inverse();
+        Matrix2<T> RowEchelon() const;
 
         // Compute the determinat
         T Determinant() const;
@@ -131,14 +132,19 @@ namespace Math
         // Conversion rutines
         std::vector<T> AsVector() const;
 
+        bool IsSquare() const;
+        bool IsRowEchelon() const;
+
+        // function to return the rank of a matrix.
+        size_t Rank() const;
+
     private:
         std::vector<T> m_matrixData{ 1 };
         size_t m_nRows{ 1 };
         size_t m_nCols{ 1 };
 
     public:
-        bool IsSquare() const;
-        bool CloseEnough(T f1, T f2) const;
+        static bool CloseEnough(T f1, T f2);
         void Swap(size_t row1, size_t row2);
         void MultAdd(size_t toRow, size_t fromRow, T multFactor);
         void MultRow(size_t toRow, T multFactor);
@@ -147,6 +153,7 @@ namespace Math
         Matrix2<T> FindSubMatrix(size_t rowNum, size_t colNum) const;
         void PrintMatrix() const;
         void PrintMatrixChar() const;
+        bool MakeNoneZeroDiagonal(size_t l = {});
     };
 
     // Define the various constructors
@@ -386,18 +393,11 @@ namespace Math
         const size_t originalColumns{ m_nCols };
         Join(identityMatrix);
 
-        // Begin the main part of the process
-        size_t cRow{ 0 };
-        size_t cCol{ 0 };
-        const size_t maxCount{ 100 };
-        size_t count{ 0 };
-        bool completeFlag{ false };
-
         for (size_t diagIndex{ 0 }; diagIndex < m_nRows; ++diagIndex)
         {
             //Loop over the diagonal of the matrix and ensure all diagonal elements are equal to one.
-            cRow = diagIndex;
-            cCol = diagIndex;
+            size_t cRow = diagIndex;
+            size_t cCol = diagIndex;
 
             // Find the index of the maximum element in the current column
             // If this isn't the current row, then swap
@@ -407,9 +407,9 @@ namespace Math
             }
 
             // Make sure the value at [cRow, cCol] == 1
-            if (const auto elementValue = self(cRow, cCol); elementValue != 1.0)
+            if (const auto elementValue = self(cRow, cCol); elementValue != T{ 1.0 })
             {
-                if (CloseEnough(elementValue, 0.0))
+                if (CloseEnough(elementValue, T{}))
                 {
                     return false;
                 }
@@ -437,6 +437,38 @@ namespace Math
         return false;
     }
 
+    // Convert to row echelon form using Gaussian elimination
+    template <typename T>
+    Matrix2<T> Matrix2<T>::RowEchelon() const
+    {
+        auto& self{ *this };
+        Matrix2<T> result(self);
+
+        // Make sure that all dialogonal elements are not close to zero
+        if (!result.MakeNoneZeroDiagonal(0)) return {};
+
+        // Make all elements below a diagonal element zero
+        for (size_t diagIndex{ 0 }; diagIndex < m_nRows; ++diagIndex)
+        {
+            size_t cRow = diagIndex;
+            size_t cCol = diagIndex;
+
+            // Make all elements below a diagonal element [i,cCol] == zero, i in {cRow+1 .. m_nRows-1}
+            for (size_t rowIndex{ cRow + 1 }; rowIndex < m_nRows; ++rowIndex)
+            {
+                const auto elementToBeSetToZero{ result(rowIndex, cCol) };
+
+                if (CloseEnough(elementToBeSetToZero, T{})) continue;
+
+                const auto a{ result(rowIndex, cCol) };
+                const auto b{ result(cRow, cCol) };
+                const auto c{ -a / b };
+                result.MultAdd(rowIndex, cRow, -elementToBeSetToZero / result(cRow, cCol));
+            }
+        }
+        return result;
+    }
+
     template <typename T>
     T Matrix2<T>::Determinant() const
     {
@@ -456,12 +488,12 @@ namespace Math
         // If the matrix is 3x3 we can simply compute the determinat directly
         if (m_nRows == 3)
         {
-            return self(0, 0) * self(1, 1) * self(2, 2)                 
-                 + self(0, 1) * self(1, 2) * self(2, 0)
-                 + self(0, 2) * self(1, 0) * self(2, 1)
-                 - self(0, 2) * self(1, 1) * self(2, 0)
-                 - self(0, 0) * self(1, 2) * self(2, 1)
-                 - self(0, 1) * self(1, 0) * self(2, 2);
+            return self(0, 0) * self(1, 1) * self(2, 2)
+                + self(0, 1) * self(1, 2) * self(2, 0)
+                + self(0, 2) * self(1, 0) * self(2, 1)
+                - self(0, 2) * self(1, 1) * self(2, 0)
+                - self(0, 0) * self(1, 2) * self(2, 1)
+                - self(0, 1) * self(1, 0) * self(2, 2);
         }
 
         // Otherwise we extract the sub-matrices and then recursivly cll this function
@@ -475,7 +507,7 @@ namespace Math
         for (size_t j{ 0 }; j < m_nCols; ++j)
         {
             // And find the sub-matrix for each element
-            Matrix2<T> subMatrix{FindSubMatrix(0,j)};
+            Matrix2<T> subMatrix{ FindSubMatrix(0,j) };
 
             // Cummulative multiply the determinat of the sub-matrix by the 
             // current element of this matrix and the sign variable (note the
@@ -673,7 +705,31 @@ namespace Math
     }
 
     template <class T>
-    bool Matrix2<T>::CloseEnough(const T f1, const T f2) const
+    bool Matrix2<T>::IsRowEchelon() const
+    {
+        bool result{ true };
+
+        ForEachElementRowFirst([&result](size_t row, size_t column, const T& element) -> bool
+            {
+                if (row > column && !CloseEnough(element, T{}))
+                {
+                    result = false;
+                    return true; // do not continue 
+                }
+                return false; // continue
+            }
+        );
+        return result;
+    }
+
+    template <class T>
+    size_t Matrix2<T>::Rank() const
+    {
+        return {};
+    }
+
+    template <class T>
+    bool Matrix2<T>::CloseEnough(const T f1, const T f2)
     {
         return fabs(f1 - f2) < 1e-9;
     }
@@ -777,7 +833,7 @@ namespace Math
         Matrix2<T> subMatrix(m_nRows - 1, m_nCols - 1);
         ForEachElementRowFirst([&](const size_t row, const size_t column, const T& element) -> bool
 
-        // Loop over the elements of the existing matrix and copy to subMatrix as appropriate
+            // Loop over the elements of the existing matrix and copy to subMatrix as appropriate
             {
                 if (row == rowNum || column == colNum)
                 {
@@ -849,5 +905,29 @@ namespace Math
             ++count;
         }
         std::cout << std::endl;
+    }
+
+    // Swap row, if neccesarry, until all diagonal element are non-zero
+    template <class T>
+    bool Matrix2<T>::MakeNoneZeroDiagonal(size_t l)
+    {
+        const auto isNonZero{ [&](T element) { return !CloseEnough(element, T{}); } };
+        auto& self(*this);
+
+        if (l == m_nRows - 1) return isNonZero(self(l, l));
+
+        for (size_t i = l; i < m_nRows; i++)
+        {
+            //Note that Swap(l, i) has not effect when i==l
+
+            Swap(l, i); // swap current element
+            if (isNonZero(self(l, l)))
+            {
+                if (MakeNoneZeroDiagonal(l + 1)) return true;
+            }
+            Swap(l, i); // backtrack
+        }
+
+        return false;
     }
 }

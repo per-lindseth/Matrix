@@ -503,8 +503,7 @@ TEST(MatrixTest, FindSubMatrix)
     }
 }
 
-
-TEST(MatrixTest, Determinat)
+TEST(MatrixTest, Determinant)
 {
     {
         std::vector<double> d3{ 2.0, 1.0, 1.0,
@@ -565,6 +564,22 @@ TEST(MatrixTest, Determinat)
         Matrix2<double> m3(3, 3, move(d3));
         EXPECT_EQ(m3.Determinant(), 0);
     }
+}
 
+TEST(MatrixTest, RowEchelon)
+{
+    std::vector<double> testData{ 1.0, 3.0, -1.0, 13.0,
+                                    4.0, -1.0, 1.0, 9.0,
+                                    2.0, 4.0, 3.0, -6.0 };
+    Matrix2<double> testMatrix(3, 4, testData);
 
+    std::vector<double> expectedData{ 1.0, 3.0, -1.0, 13.0,
+                                      0.0, -13.0, 5.0, -43.0,
+                                      0.0, 0.0, 4.2307692307692308, -25.384615384615383 };
+    Matrix2<double> expectedMatrix(3, 4, expectedData);
+
+    Matrix2<double> rowEchelonMatrix4{ testMatrix.RowEchelon() };
+    rowEchelonMatrix4.PrintMatrix();
+    EXPECT_EQ(rowEchelonMatrix4, expectedMatrix);;
+    EXPECT_TRUE(rowEchelonMatrix4.IsRowEchelon());
 }

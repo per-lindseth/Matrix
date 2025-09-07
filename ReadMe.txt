@@ -86,5 +86,12 @@ Added a global function : Matrix2 x Vector --> Vector
 
 Added a few helper operators and functions
 
+11. Added RowEchelon to matrix, and added linear_solve() global function to Vector
+----------------------------------------------------------------------------------
+For the RowEchelon I added an extra step to ensure that the all diagonal elements
+are different from zero, by swapping the rows, before continue coputing the
+row echelon form.
+
+
 
 
