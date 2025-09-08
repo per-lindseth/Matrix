@@ -568,18 +568,118 @@ TEST(MatrixTest, Determinant)
 
 TEST(MatrixTest, RowEchelon)
 {
-    std::vector<double> testData{ 1.0, 3.0, -1.0, 13.0,
-                                    4.0, -1.0, 1.0, 9.0,
-                                    2.0, 4.0, 3.0, -6.0 };
-    Matrix2<double> testMatrix(3, 4, testData);
+    {
+        std::vector<double> testData{ 1.0, 3.0, -1.0, 13.0,
+                                        4.0, -1.0, 1.0, 9.0,
+                                        2.0, 4.0, 3.0, -6.0 };
+        Matrix2<double> testMatrix(3, 4, testData);
 
-    std::vector<double> expectedData{ 1.0, 3.0, -1.0, 13.0,
-                                      0.0, -13.0, 5.0, -43.0,
-                                      0.0, 0.0, 4.2307692307692308, -25.384615384615383 };
-    Matrix2<double> expectedMatrix(3, 4, expectedData);
+        std::vector<double> expectedData{ 1.0, 3.0, -1.0, 13.0,
+                                          0.0, -13.0, 5.0, -43.0,
+                                          0.0, 0.0, 4.2307692307692308, -25.384615384615383 };
+        Matrix2<double> expectedMatrix(3, 4, expectedData);
 
-    Matrix2<double> rowEchelonMatrix4{ testMatrix.RowEchelon() };
-    rowEchelonMatrix4.PrintMatrix();
-    EXPECT_EQ(rowEchelonMatrix4, expectedMatrix);;
-    EXPECT_TRUE(rowEchelonMatrix4.IsRowEchelon());
+        Matrix2<double> rowEchelonMatrix4{ testMatrix.RowEchelon() };
+        EXPECT_EQ(rowEchelonMatrix4, expectedMatrix);;
+        EXPECT_TRUE(rowEchelonMatrix4.IsRowEchelon());
+    }
 }
+
+TEST(MatrixTest, IsNonZero)
+{
+    {
+        std::vector<double> testData{ 1.0, 3.0, -1.0,
+                                      4.0, -1.0, 1.0,
+                                      2.0, 4.0, 3.0 };
+        Matrix2<double> testMatrix(3, 3, testData);
+
+        EXPECT_TRUE(testMatrix.IsNonZero());
+    }
+
+    {
+        std::vector<double> testData{ 0.0, 0.0, 1.0,
+                                      1.0, 0.0, 1.0,
+                                      0.0, 0.0, 1.0 };
+        Matrix2<double> testMatrix(3, 3, testData);
+
+        EXPECT_TRUE(testMatrix.IsNonZero());
+    }
+
+    {
+        std::vector<double> testData{ 0.0, 0.0, 0.0,
+                                      0.0, 0.0, 0.0,
+                                      0.0, 0.0, 0.0 };
+        Matrix2<double> testMatrix(3, 3, testData);
+
+        EXPECT_FALSE(testMatrix.IsNonZero());
+    }
+}
+
+TEST(MatrixTest, Rank)
+{
+    {
+        std::vector<double> testData{ 1.0, 3.0, -1.0,
+                                      4.0, -1.0, 1.0,
+                                      2.0, 4.0, 3.0 };
+        Matrix2<double> testMatrix(3, 3, testData);
+
+        EXPECT_EQ(testMatrix.Rank(), 3);
+
+        bool determinantIsCloseToZero{ fabs(testMatrix.Determinant()) < 1e-9 };
+        EXPECT_FALSE(determinantIsCloseToZero);
+    }
+
+    {
+        std::vector<double> testData{ 3.0, 1.0, 2.0,
+                                      5.0, 3.0, 6.0,
+                                      2.0, 2.0, 4.0 };
+        Matrix2<double> testMatrix(3, 3, testData);
+
+        EXPECT_EQ(testMatrix.Rank(), 2);
+        bool determinantIsCloseToZero{ fabs(testMatrix.Determinant()) < 1e-9 };
+        EXPECT_TRUE(determinantIsCloseToZero);
+    }
+
+    {
+        std::vector<double> testData{ 0.0, 0.0, 1.0,
+                                      1.0, 0.0, 1.0,
+                                      0.0, 0.0, 1.0 };
+        Matrix2<double> testMatrix(3, 3, testData);
+
+        EXPECT_EQ(testMatrix.Rank(), 2);
+        bool determinantIsCloseToZero{ fabs(testMatrix.Determinant()) < 1e-9 };
+        EXPECT_TRUE(determinantIsCloseToZero);
+    }
+
+    {
+        std::vector<double> testData{ 0.0, 0.0, 0.0,
+                                      0.0, 0.0, 0.0,
+                                      0.0, 0.0, 0.0 };
+        Matrix2<double> testMatrix(3, 3, testData);
+
+        EXPECT_EQ(testMatrix.Rank(), 0);
+        bool determinantIsCloseToZero{ fabs(testMatrix.Determinant()) < 1e-9 };
+        EXPECT_TRUE(determinantIsCloseToZero);
+    }
+    {
+        std::vector<double> testData{
+             -4.7291,    -2.8861,   -13.485,    6.2044,  -4.703,  -1.525,   -3.1491, -24.591,   -24.792,   -7.087,
+              0.043334, -14.553,    -11.727,    8.3366, -14.543,  -2.392,   18.48,    24.6,      24.847,   -2.345,
+             -1.4923,   -10.777,      1.7484,  22.791,   20.327,  -4.3204, -19.203,  -22.244,    -7.7343, -12.647,
+              2.9177,   -12.577,     18.171,   -1.4132,  21.384, -20.685,  -22.994,  -19.162,     3.3461, -11.15,
+             10.905,    -17.776,      8.2851,  15.74,    13.771,   5.2292,  21.998,  -20.271,    -4.5928,   3.4413,
+             16.256,     -4.3553,   11.404,   -21.346,   20.518,  10.256,   -6.1787, -24.039,    10.784,   -4.9813,
+             -4.4796,     0.47418, -12.643,     5.5588,  18.372, -15.206,   13.466,   21.651,    11.831,   -7.4303,
+              2.8898,    -3.1243,    5.2402,   -5.098,   11.594, -16.923,   14.295,   -9.828,   -19.16,    -16.774,
+            -16.055,     -3.1512,  -13.819,    22.362,   -6.8418, 22.704,   -6.0929, -20.944,     6.5914,   3.3961,
+             21.652,     24.56,    -19.194,   -17.677,  -13.546, -15.387,  -12.653,   -0.060989, 13.437,    5.2292
+        };
+        Matrix2<double> testMatrix(10, 10, testData);
+
+        EXPECT_EQ(testMatrix.Rank(), 10);
+        bool determinantIsCloseToZero{ fabs(testMatrix.Determinant()) < 1e-9 };
+        EXPECT_FALSE(determinantIsCloseToZero);
+    }
+}
+
+

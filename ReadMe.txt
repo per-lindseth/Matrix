@@ -92,6 +92,8 @@ For the RowEchelon I added an extra step to ensure that the all diagonal element
 are different from zero, by swapping the rows, before continue coputing the
 row echelon form.
 
-
-
+12. Added Rank() to matrix
+---------------------------
+The main addedtion here is the new Rank() to Matrix<2>.
+IsNonZero() is also added and a missing test is added to IsRowEchelon().
 

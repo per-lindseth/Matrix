@@ -237,135 +237,202 @@ void test2()
 
 void test3()
 {
-    std::vector<double> simpleData1{ 1.0, 2.0, 3.0,
-                                     1.0, 2.0, 3.0,
-                                     1.0, 2.0, 3.0 };
-    Matrix2<double> testMatrix1(3, 3, simpleData1);
-    std::cout << "testMatrix 1: \n";
-    testMatrix1.PrintMatrix();
-    std::cout << std::format("testMatrix 1 is{} in row echelon form\n", (testMatrix1.IsRowEchelon() ? "" : " not"));
-    std::cout << std::endl;
+    //std::vector<double> simpleData1{ 1.0, 2.0, 3.0,
+    //                                 1.0, 2.0, 3.0,
+    //                                 1.0, 2.0, 3.0 };
+    //Matrix2<double> testMatrix1(3, 3, simpleData1);
+    //std::cout << "testMatrix 1: \n";
+    //testMatrix1.PrintMatrix();
+    //std::cout << std::format("testMatrix 1 is{} in row echelon form\n", (testMatrix1.IsRowEchelon() ? "" : " not"));
+    //std::cout << std::endl;
 
-    std::vector<double> simpleData2{ 1.0, 2.0, 3.0,
-                                     0.0, 2.0, 3.0,
-                                     0.0, 0.0, 3.0 };
-    Matrix2<double> testMatrix2(3, 3, simpleData2);
-    std::cout << "testMatrix 2: \n";
-    testMatrix2.PrintMatrix();
-    std::cout << std::format("testMatrix 2 is{} in row echelon form\n", (testMatrix2.IsRowEchelon() ? "" : " not"));
-    std::cout << std::endl;
+    //std::vector<double> simpleData2{ 1.0, 2.0, 3.0,
+    //                                 0.0, 2.0, 3.0,
+    //                                 0.0, 0.0, 3.0 };
+    //Matrix2<double> testMatrix2(3, 3, simpleData2);
+    //std::cout << "testMatrix 2: \n";
+    //testMatrix2.PrintMatrix();
+    //std::cout << std::format("testMatrix 2 is{} in row echelon form\n", (testMatrix2.IsRowEchelon() ? "" : " not"));
+    //std::cout << std::endl;
 
-    std::vector<double> simpleData3{ 1.0, 1.0, 2.0, 9.0,
-                                     2.0, 4.0, -3.0, 1.0,
-                                     3.0, 6.0, -5.0, 0.0 };
-    Matrix2<double> testMatrix3(3, 4, simpleData3);
-    std::cout << "testMatrix 3: \n";
-    testMatrix3.PrintMatrix();
-    std::cout << std::endl;
+    //std::vector<double> simpleData3{ 1.0, 1.0, 2.0, 9.0,
+    //                                 2.0, 4.0, -3.0, 1.0,
+    //                                 3.0, 6.0, -5.0, 0.0 };
+    //Matrix2<double> testMatrix3(3, 4, simpleData3);
+    //std::cout << "testMatrix 3: \n";
+    //testMatrix3.PrintMatrix();
+    //std::cout << std::endl;
 
-    Matrix2<double> testMatrix4{ testMatrix3.RowEchelon() };
-    std::cout << "testMatrix 4: \n";
-    testMatrix4.PrintMatrix();
-    std::cout << std::endl;
+    //Matrix2<double> testMatrix4{ testMatrix3.RowEchelon() };
+    //std::cout << "testMatrix 4: \n";
+    //testMatrix4.PrintMatrix();
+    //std::cout << std::endl;
 
-    std::vector<double> simpleData5{ 0.0, 1.0, 2.0, 9.0,
-                                     2.0, 0.0, -3.0, 1.0,
-                                     3.0, 6.0, -5.0, 0.0 };
-    Matrix2<double> testMatrix5(3, 4, simpleData5);
-    std::cout << "testMatrix 5: \n";
-    testMatrix5.PrintMatrix();
-    std::cout << std::endl;
+    //std::vector<double> simpleData5{ 0.0, 1.0, 2.0, 9.0,
+    //                                 2.0, 0.0, -3.0, 1.0,
+    //                                 3.0, 6.0, -5.0, 0.0 };
+    //Matrix2<double> testMatrix5(3, 4, simpleData5);
+    //std::cout << "testMatrix 5: \n";
+    //testMatrix5.PrintMatrix();
+    //std::cout << std::endl;
 
-    Matrix2<double> testMatrix6{ testMatrix5.RowEchelon() };
-    std::cout << "testMatrix 6: \n";
-    testMatrix6.PrintMatrix();
-    std::cout << std::endl;
+    //Matrix2<double> testMatrix6{ testMatrix5.RowEchelon() };
+    //std::cout << "testMatrix 6: \n";
+    //testMatrix6.PrintMatrix();
+    //std::cout << std::endl;
+    //{
+    //    std::vector<double> simpleData7{ 1, 3, -1, 13,
+    //                                     4, -1, 1, 9,
+    //                                     2, 4, 3, -6 };
+    //    Matrix2<double> testMatrix8(3, 4, simpleData7);
+    //    std::cout << "testMatrix 8: \n";
+    //    testMatrix8.PrintMatrix();
+    //    std::cout << std::endl;
+
+    //    Matrix2<double> testMatrix9{ testMatrix8.RowEchelon() };
+    //    std::cout << "testMatrix 9: \n";
+    //    testMatrix9.PrintMatrix();
+    //    std::cout << std::endl;
+
+    //    Matrix2<double> testMatrix10; // 3x3 matrix
+    //    Matrix2<double> testMatrix11; // 3x1 matrix
+    //    testMatrix8.Separate(testMatrix10, testMatrix11, 3);
+    //    std::cout << "testMatrix 10: \n";
+    //    testMatrix10.PrintMatrix();
+    //    std::cout << std::endl;
+    //    std::cout << "testMatrix 11: \n";
+    //    testMatrix11.PrintMatrix();
+    //    std::cout << std::endl;
+    //    Vector<double> testVector{ testMatrix11.AsVector() };
+    //    std::cout << "testVector: \n";
+    //    testVector.PrintVector();
+    //    std::cout << std::endl;
+
+    //    auto result{ linear_solve(testMatrix10, testVector) };
+
+    //    std::cout << "result Vector: \n";
+    //    result.PrintVector();
+    //    std::cout << std::endl;
+
+    //    std::cout << std::endl;
+    //}
+    //{
+    //    std::vector<double> simpleData7{ 2, -1, 7, 2,
+    //                                     4, 2, 2, 5,
+    //                                     3, 1, 3, 1 };
+    //    Matrix2<double> testMatrix8(3, 4, simpleData7);
+    //    std::cout << "testMatrix 8: \n";
+    //    testMatrix8.PrintMatrix();
+    //    std::cout << std::endl;
+
+    //    Matrix2<double> testMatrix9{ testMatrix8.RowEchelon() };
+    //    std::cout << "testMatrix 9: \n";
+    //    testMatrix9.PrintMatrix();
+    //    std::cout << std::endl;
+
+    //    Matrix2<double> testMatrix10; // 3x3 matrix
+    //    Matrix2<double> testMatrix11; // 3x1 matrix
+    //    testMatrix8.Separate(testMatrix10, testMatrix11, 3);
+    //    std::cout << "testMatrix 10: \n";
+    //    testMatrix10.PrintMatrix();
+    //    std::cout << std::endl;
+    //    std::cout << "testMatrix 11: \n";
+    //    testMatrix11.PrintMatrix();
+    //    std::cout << std::endl;
+    //    Vector<double> testVector{ testMatrix11.AsVector() };
+    //    std::cout << "testVector: \n";
+    //    testVector.PrintVector();
+    //    std::cout << std::endl;
+
+    //    auto result{ linear_solve(testMatrix10, testVector) };
+
+    //    std::cout << "result Vector: \n";
+    //    result.PrintVector();
+    //    std::cout << std::endl;
+
+    //    std::cout << std::endl;
+    //}
+    //{
+    //    std::vector<double> testData{ 1.0, 3.0, -1.0, 13.0,
+    //                                    4.0, -1.0, 1.0, 9.0,
+    //                                    2.0, 4.0, 3.0, -6.0 };
+    //    Matrix2<double> testMatrix(3, 4, testData);
+
+    //    std::vector<double> expectedData{ 1.0, 3.0, -1.0, 13.0,
+    //                                      0.0, -13.0, 5.0, -43.0,
+    //                                      0.0, 0.0, 4.231, -25.385 };
+    //    Matrix2<double> expectedMatrix(3, 4, expectedData);
+
+    //    Matrix2<double> rowEchelonMatrix{ testMatrix.RowEchelon() };
+    //    rowEchelonMatrix.PrintMatrix();
+
+    //}
     {
-        std::vector<double> simpleData7{ 1, 3, -1, 13,
-                                         4, -1, 1, 9,
-                                         2, 4, 3, -6 };
-        Matrix2<double> testMatrix8(3, 4, simpleData7);
-        std::cout << "testMatrix 8: \n";
-        testMatrix8.PrintMatrix();
-        std::cout << std::endl;
+        std::vector<double> testData{ 0.0, 0.0, 1.0,
+                                      1.0, 0.0, 1.0,
+                                      0.0, 0.0, 1.0 };
+        Matrix2<double> testMatrix(3, 3, testData);
 
-        Matrix2<double> testMatrix9{ testMatrix8.RowEchelon() };
-        std::cout << "testMatrix 9: \n";
-        testMatrix9.PrintMatrix();
-        std::cout << std::endl;
+        const auto nonZero{ testMatrix.IsNonZero() };
+        cout << format("nonZero      = {}\n", nonZero);
 
-        Matrix2<double> testMatrix10; // 3x3 matrix
-        Matrix2<double> testMatrix11; // 3x1 matrix
-        testMatrix8.Separate(testMatrix10, testMatrix11, 3);
-        std::cout << "testMatrix 10: \n";
-        testMatrix10.PrintMatrix();
-        std::cout << std::endl;
-        std::cout << "testMatrix 11: \n";
-        testMatrix11.PrintMatrix();
-        std::cout << std::endl;
-        Vector<double> testVector{ testMatrix11.AsVector() };
-        std::cout << "testVector: \n";
-        testVector.PrintVector();
-        std::cout << std::endl;
-
-        auto result{ linear_solve(testMatrix10, testVector) };
-
-        std::cout << "result Vector: \n";
-        result.PrintVector();
-        std::cout << std::endl;
-
-        std::cout << std::endl;
-    }
-    {
-        std::vector<double> simpleData7{ 2, -1, 7, 2,
-                                         4, 2, 2, 5,
-                                         3, 1, 3, 1 };
-        Matrix2<double> testMatrix8(3, 4, simpleData7);
-        std::cout << "testMatrix 8: \n";
-        testMatrix8.PrintMatrix();
-        std::cout << std::endl;
-
-        Matrix2<double> testMatrix9{ testMatrix8.RowEchelon() };
-        std::cout << "testMatrix 9: \n";
-        testMatrix9.PrintMatrix();
-        std::cout << std::endl;
-
-        Matrix2<double> testMatrix10; // 3x3 matrix
-        Matrix2<double> testMatrix11; // 3x1 matrix
-        testMatrix8.Separate(testMatrix10, testMatrix11, 3);
-        std::cout << "testMatrix 10: \n";
-        testMatrix10.PrintMatrix();
-        std::cout << std::endl;
-        std::cout << "testMatrix 11: \n";
-        testMatrix11.PrintMatrix();
-        std::cout << std::endl;
-        Vector<double> testVector{ testMatrix11.AsVector() };
-        std::cout << "testVector: \n";
-        testVector.PrintVector();
-        std::cout << std::endl;
-
-        auto result{ linear_solve(testMatrix10, testVector) };
-
-        std::cout << "result Vector: \n";
-        result.PrintVector();
-        std::cout << std::endl;
-
-        std::cout << std::endl;
-    }
-    {
-        std::vector<double> testData{ 1.0, 3.0, -1.0, 13.0,
-                                        4.0, -1.0, 1.0, 9.0,
-                                        2.0, 4.0, 3.0, -6.0 };
-        Matrix2<double> testMatrix(3, 4, testData);
-
-        std::vector<double> expectedData{ 1.0, 3.0, -1.0, 13.0,
-                                          0.0, -13.0, 5.0, -43.0,
-                                          0.0, 0.0, 4.231, -25.385 };
-        Matrix2<double> expectedMatrix(3, 4, expectedData);
 
         Matrix2<double> rowEchelonMatrix{ testMatrix.RowEchelon() };
         rowEchelonMatrix.PrintMatrix();
 
+        size_t rank{ testMatrix.Rank() };
+        cout << format("rank        = {}\n", rank);
+        double determinant{ testMatrix.Determinant() };
+        cout << format("determinant = {}\n", determinant);
+        bool closeToZero{ fabs(determinant) < 1e-9 };
+        cout << format("closeToZero = {}\n", closeToZero);
+
+    }
+    //{
+    //    const size_t N = 100;
+
+    //    // Random number generator
+    //    std::random_device rd;
+    //    std::mt19937 gen(rd());
+    //    std::uniform_real_distribution<double> dist(-25.0, 25.0);
+
+    //    // Initialiser vektor med 100 random tall
+    //    std::vector<double> values;
+    //    values.reserve(N);
+
+    //    for (size_t i = 0; i < N; ++i) {
+    //        values.push_back(dist(gen));
+    //    }
+
+    //    // Skriv ut de første 10 for å sjekke
+    //    for (size_t i = 0; i < 100; ++i) {
+    //        std::cout << format("{:.5}, ", values[i]);
+    //        if (i%10 == 0)
+    //            std::cout << "\n";
+    //    }
+    //}
+    {
+        std::vector<double> testData{
+             -4.7291,    -2.8861,   -13.485,    6.2044,  -4.703,  -1.525,   -3.1491, -24.591,   -24.792,   -7.087,
+              0.043334, -14.553,    -11.727,    8.3366, -14.543,  -2.392,   18.48,    24.6,      24.847,   -2.345,
+             -1.4923,   -10.777,      1.7484,  22.791,   20.327,  -4.3204, -19.203,  -22.244,    -7.7343, -12.647,
+              2.9177,   -12.577,     18.171,   -1.4132,  21.384, -20.685,  -22.994,  -19.162,     3.3461, -11.15,
+             10.905,    -17.776,      8.2851,  15.74,    13.771,   5.2292,  21.998,  -20.271,    -4.5928,   3.4413,
+             16.256,     -4.3553,   11.404,   -21.346,   20.518,  10.256,   -6.1787, -24.039,    10.784,   -4.9813,
+             -4.4796,     0.47418, -12.643,     5.5588,  18.372, -15.206,   13.466,   21.651,    11.831,   -7.4303,
+              2.8898,    -3.1243,    5.2402,   -5.098,   11.594, -16.923,   14.295,   -9.828,   -19.16,    -16.774,
+            -16.055,     -3.1512,  -13.819,    22.362,   -6.8418, 22.704,   -6.0929, -20.944,     6.5914,   3.3961,
+             21.652,     24.56,    -19.194,   -17.677,  -13.546, -15.387,  -12.653,   -0.060989, 13.437,    5.2292
+        };
+        Matrix2<double> testMatrix(10, 10, testData);
+
+
+        size_t rank{ testMatrix.Rank() };
+        cout << format("rank        = {}\n", rank);
+        double determinant{ testMatrix.Determinant() };
+        cout << format("determinant = {}\n", determinant);
+        bool closeToZero{ fabs(determinant) < 1e-9 };
+        cout << format("closeToZero = {}\n", closeToZero);
     }
 }
 
@@ -442,8 +509,6 @@ void test5()
     Vector<double> errorVector{ unknownVector - compSolution };
     errorVector.PrintVector();
     cout << endl;
-
-
 }
 
 int main()

@@ -132,10 +132,10 @@ namespace Math
         // Conversion rutines
         std::vector<T> AsVector() const;
 
+        // Query rutines
         bool IsSquare() const;
         bool IsRowEchelon() const;
-
-        // function to return the rank of a matrix.
+        bool IsNonZero() const;
         size_t Rank() const;
 
     private:
@@ -513,7 +513,6 @@ namespace Math
             // current element of this matrix and the sign variable (note the
             // recursive calling of Determinat() method.)
             const auto s{ subMatrix.Determinant() };
-            std::cout << std::format("[{}, {}] * {} * {} \n", 0, j, s, sign);
             cumulativeSum += self(0, j) * s * sign;
             sign = -sign;
         }
@@ -707,6 +706,12 @@ namespace Math
     template <class T>
     bool Matrix2<T>::IsRowEchelon() const
     {
+        // Return false if the matrix is empty
+        if (*this == Matrix2<T>())
+        {
+            return false;
+        }
+
         bool result{ true };
 
         ForEachElementRowFirst([&result](size_t row, size_t column, const T& element) -> bool
@@ -722,10 +727,94 @@ namespace Math
         return result;
     }
 
+    template <typename T>
+    bool Matrix2<T>::IsNonZero() const
+    {
+        bool result{ false };
+        ForEachElementRowFirst([&](size_t row, size_t column, const T& element)->bool
+            {
+                if (CloseEnough(element, T{}))
+                {
+                    return false; // Continue
+                }
+
+                result = true;
+                return true; // do not continue
+            }
+        );
+        return result;
+    }
+
     template <class T>
     size_t Matrix2<T>::Rank() const
     {
-        return {};
+        // Convert the matrix to row echelon form
+        Matrix2<T> matrixCopy{ RowEchelon() };
+
+        if (matrixCopy.IsRowEchelon())
+        {
+            // Converting to row-echelon form did worked, so we can simply
+            // count the number of non-zero rows to get the rank.
+
+            size_t rank{ 0 };
+            for (size_t row{ 0 }; row < matrixCopy.m_nRows; ++row)
+            {
+                bool currentColumnIsNoneZero{ false };
+                for (size_t column{ 0 }; column < matrixCopy.m_nCols; ++column)
+                {
+                    if (!CloseEnough(matrixCopy(row, column), T{}))
+                    {
+                        currentColumnIsNoneZero = true;
+                        break;
+                    }
+                }
+                if (currentColumnIsNoneZero) ++rank;
+            }
+            return rank;
+        }
+        // Find largest non-zero sub-matrix with non-zero determinat.
+
+        // Setup a std::vector to store submatrices as we go.
+        // Stor the current matrix into the vector first.
+        std::vector<Matrix2<T>> subMatrixVector{ *this };
+
+        // Loop through the subMatrixVector until either we have tested very
+        // sub-matrix or the completeFlag is set.
+        size_t subMatrixCount{ 0 };
+
+        while (subMatrixCount < subMatrixVector.size())
+        {
+            // Extract the current matrix to work with
+            auto currentMatrix{ subMatrixVector[subMatrixCount++] };
+
+            if (currentMatrix.IsNonZero())
+            {
+                // If the determinant is non-zero, the we have our result
+                T currentMatrixDet{ currentMatrix.Determinant() };
+
+                if (CloseEnough(currentMatrixDet, T{}))
+                {
+                    // Extract and store each sub-matrix, if larger tha 2x2
+                    if (currentMatrix.GetNumRows() > 2 && currentMatrix.GetNumCols() > 2)
+                    {
+                        for (size_t i{ 0 }; i < currentMatrix.GetNumRows(); ++i)
+                        {
+                            for (size_t j{ 0 }; j < currentMatrix.GetNumCols(); ++j)
+                            {
+                                // Extract this sub-matrix and store.
+                                subMatrixVector.push_back(currentMatrix.FindSubMatrix(i, j));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    return currentMatrix.GetNumRows();
+                }
+            }
+        }
+
+        return 0;
     }
 
     template <class T>
